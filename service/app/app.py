@@ -88,7 +88,7 @@ async def login_redirect(request: Request):
     return templates.TemplateResponse("index.html", {"request": request},)
 
 
-@app.post(path='token',
+@app.post(path='/login',
           response_model=Token,
           status_code=status.HTTP_200_OK,
           summary="Login a user",
@@ -114,14 +114,6 @@ async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depen
     return {"api_token": api_token, "token_type": "bearer"}
 
 
-@app.post("/login", response_class=HTMLResponse)
-async def login_post(request: Request):
-    form = LoginForm(request)
-    await form.load_data()
-    response = RedirectResponse("index.html", status.HTTP_302_FOUND)
-    await login(response=response, form_data=form)
-
-    return response
 
 # @app.post(
 #     path="/api/tweets",

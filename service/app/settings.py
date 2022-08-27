@@ -18,7 +18,7 @@ ALGORITHM = os.environ.get('ALGORITHM')
 SECRET_KEY = os.environ.get("SECRET_KEY")
 TTL_JWT = os.environ.get("TTL_JWT")
 DB_DEBUG = os.environ.get("DEBUG")
-# SECRET_KEY = os.environ.get('SECRET_KEY')
+
 
 USER = os.environ['USER']
 PASSWORD = os.environ['PASSWORD']

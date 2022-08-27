@@ -8,7 +8,7 @@ from database import session, engine
 from models import User
 from crypt import decode_token_jwt, pwd_context
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
 
 def get_token_payload(token: str = Depends(oauth2_scheme)):
