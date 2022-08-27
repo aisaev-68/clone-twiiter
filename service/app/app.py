@@ -4,14 +4,14 @@ import aiofiles
 from sqlalchemy.ext.asyncio import AsyncSession
 import uvicorn
 from pathlib import Path
-
+from sqlalchemy import select
 from fastapi import FastAPI, status, Form, Depends, \
     HTTPException, File, UploadFile, Request, Response
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, HTTPBearer
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from werkzeug.utils import secure_filename
 from fastapi.staticfiles import StaticFiles
@@ -20,8 +20,7 @@ from database import engine, Base, session
 from schemas import TweetOut, ImageOut, TweetIn, AuthModel, DefaultError, Token
 from models import User, Tweet
 from utils import allowed_file, add_image
-from auth import authenticate
-from crypt import create_token_jwt, get_password_hash
+from auth import Auth
 from forms import LoginForm
 
 
@@ -49,7 +48,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 # app.add_middleware(HTTPSRedirectMiddleware)
-security = HTTPBasic()
+security = HTTPBearer()
+auth_handler = Auth()
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -62,13 +62,13 @@ async def startup():
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
     new_user = User(username="kaanersoy",
-                    hashed_password=get_password_hash("password"),
+                    hashed_password=auth_handler.encode_password("password"),
                     email="asd@ya.ru")
 
     async with session.begin():
         session.add(new_user)
-    # access_token = create_token_jwt(new_user)
-    # print(access_token)
+
+    print(new_user.hashed_password)
 
 
 @app.on_event("shutdown")
@@ -88,30 +88,30 @@ async def login_redirect(request: Request):
     return templates.TemplateResponse("index.html", {"request": request},)
 
 
-@app.post(path='/login',
+@app.post('/login',
           response_model=Token,
           status_code=status.HTTP_200_OK,
           summary="Login a user",
           responses={401: {"model": DefaultError}},
           )
-async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await authenticate(form_data.username, form_data.password)
-    print(user)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-        )
+async def login(user_details: AuthModel):
 
-    api_token = create_token_jwt(user)
-    print(111111, api_token)
+    stmt_user = select(User).where(User.username == user_details.username)
 
-    response.set_cookie(
-        key="api_token",
-        value=f"Bearer {api_token}",
-        httponly=True
-    )
-    return {"api_token": api_token, "token_type": "bearer"}
+    user = await session.execute(stmt_user)
+    user = user.scalar()
+    print(11111, user)
+
+    if user is None:
+        return HTTPException(status_code=401, detail='Invalid username')
+
+    if not auth_handler.verify_password(user_details.password, user.hashed_password):
+        return HTTPException(status_code=401, detail='Invalid password')
+
+    access_token = auth_handler.create_jwt_token(user.username)
+    refresh_token = auth_handler.encode_refresh_token(user.username)
+    return {'access_token': access_token, 'refresh_token': refresh_token}
+
 
 
 

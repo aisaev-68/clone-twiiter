@@ -17,6 +17,6 @@ aiofiles
 werkzeug
 jinja2
 python-multipart
-python-jose[cryptography]
+PyJWT
 passlib[bcrypt]
 

@@ -34,5 +34,6 @@ class AuthModel(BaseModel):
     password: str
 
 class Token(BaseModel):
-    api_token: str
-    token_type: str
+    access_token: str
+    refresh_token: str
+    # token_type: str

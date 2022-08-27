@@ -1,43 +1,73 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy import select
 
-from database import session, engine
-from models import User
-from crypt import decode_token_jwt, pwd_context
+from passlib.context import CryptContext
+import jwt
+from settings import ALGORITHM, SECRET_KEY, TTL_JWT
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
 
-def get_token_payload(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = decode_token_jwt(token)
-        del payload['exp']
-        return payload
-    except:
-        credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='Could not validate credentials',
-            headers={'WWW-Authenticate': 'Bearer'},
+
+class Auth():
+    hasher = CryptContext(schemes=['bcrypt'], deprecated="auto")
+    secret = SECRET_KEY
+
+    def encode_password(self, password):
+        return self.hasher.hash(password)
+
+    def verify_password(self, password, encoded_password):
+        return self.hasher.verify(password, encoded_password)
+
+    def create_jwt_token(self, username):
+        payload = {
+            'exp': datetime.utcnow() + timedelta(minutes=int(TTL_JWT)),
+            'iat': datetime.utcnow(),
+            'scope': 'access_token',
+            'sub': username
+        }
+        return jwt.encode(
+            payload,
+            self.secret,
+            algorithm=ALGORITHM
         )
-        raise credentials_exception
 
+    def decode_token(self, token):
+        try:
+            payload = jwt.decode(token, self.secret, algorithms=ALGORITHM)
+            if (payload['scope'] == 'access_token'):
+                return payload['sub']
+            raise HTTPException(status_code=401, detail='Scope for the token is invalid')
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail='Token expired')
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=401, detail='Invalid token')
 
-async def authenticate(username: str, password: str):
-    stmt_user = select(User).where(User.username == username)
+    def encode_refresh_token(self, username):
+        payload = {
+            'exp': datetime.utcnow() + timedelta(minutes=int(TTL_JWT)),
+            'iat': datetime.utcnow(),
+            'scope': 'refresh_token',
+            'sub': username
+        }
+        return jwt.encode(
+            payload,
+            self.secret,
+            algorithm=ALGORITHM
+        )
 
-    user = await session.execute(stmt_user)
-    user = user.scalar()
-
-    if not user:
-        return False
-
-    if not pwd_context.verify(password, user.hashed_password):
-        return False
-
-    return user
-
-
-
+    def refresh_token(self, refresh_token):
+        try:
+            payload = jwt.decode(refresh_token, self.secret, algorithms=['HS256'])
+            if (payload['scope'] == 'refresh_token'):
+                username = payload['sub']
+                new_token = self.create_jwt_token(username)
+                return new_token
+            raise HTTPException(status_code=401, detail='Invalid scope for token')
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail='Refresh token expired')
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=401, detail='Invalid refresh token')

@@ -67,13 +67,6 @@ class User(Base):
     def followers_count(self):
         return self.followers.count()
 
-    def __setattr__(self, username: str, value: Any) -> None:
-        from crypt import pwd_context
-
-        if username == 'password':
-            super().__setattr__(username, pwd_context.hash(value))
-        else:
-            super().__setattr__(username, value)
 
 
 user_like_tweet = Table(
