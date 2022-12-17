@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.database import get_db
-from depends.get_token_header import get_apikey_header
-from logger.logger import get_logger
-from models.models import Users
-from schemas.schemas import Success, UserOut
+from utils.get_token_header import get_apikey_header
+from utils.logger import get_logger
+from db.models import Users
+from db.schemas import Success, UserOut
 
 logger = get_logger("routers.users")
 

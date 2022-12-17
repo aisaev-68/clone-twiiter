@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, File, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.database import get_db
-from depends.get_token_header import get_apikey_header
-from logger.logger import get_logger
-from models.models import PostImages, Users
-from schemas.schemas import FileSuccess
+from utils.get_token_header import get_apikey_header
+from utils.logger import get_logger
+from db.models import PostImages, Users
+from db.schemas import FileSuccess
 from utils.errors import AppException
 
 logger = get_logger("routers.medias")

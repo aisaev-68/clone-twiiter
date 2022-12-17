@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from logger.logger import get_logger
+from utils.logger import get_logger
 from settings import settings, DATABASE_URL
 
 logger = get_logger("routers.tweets")

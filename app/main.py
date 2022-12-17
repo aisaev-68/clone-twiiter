@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from logger.logger import get_logger
+from utils.logger import get_logger
 from routers import likes, medias, tweets, users
-from schemas.schemas import Failure
+from db.schemas import Failure
 
 logger = get_logger("main")
 

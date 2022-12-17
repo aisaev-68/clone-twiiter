@@ -20,8 +20,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship, selectinload
 
 from db.database import Base
-from logger.logger import get_logger
-from schemas.schemas import (
+from utils.logger import get_logger
+from schemas import (
     FileSuccess,
     NewTweetOut,
     Success,
