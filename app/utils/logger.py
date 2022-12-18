@@ -3,7 +3,7 @@ import os
 from logging import Logger, config, getLogger
 
 FOLDER_LOG = "app_logs"
-LOGGING_CONFIG_FILE = "logger/loggers.json"
+LOGGING_CONFIG_FILE = "utils/loggers.json"
 
 
 def create_log_folder(folder: str = FOLDER_LOG) -> None:

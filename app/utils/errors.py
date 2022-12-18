@@ -3,7 +3,7 @@ from typing import Any, Callable, TypeVar, cast
 
 from fastapi.responses import JSONResponse
 
-from logger import get_logger
+from .logger import get_logger
 
 FunVar = TypeVar("FunVar", bound=Callable[..., Any])
 

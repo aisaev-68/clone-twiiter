@@ -16,7 +16,7 @@ router = APIRouter(
 
 
 @router.delete(
-    "/{tweet_id}/likes/",
+    "/{tweet_id}/likes",
     summary="Удаляет лайк твита с заданным ID",
     response_model=Success,
     description="Маршрут для удаления лайка твита с заданным ID.",
@@ -48,7 +48,7 @@ async def delete_like(
 
 
 @router.post(
-    "/{tweet_id}/likes/",
+    "/{tweet_id}/likes",
     summary="Добавляет лайк твиту с заданным ID",
     response_model=Success,
     description="Маршрут для добавления лайка твиту с заданным ID.",
@@ -71,6 +71,7 @@ async def like_tweet(
     logger.info("Добавление лайка пользователя.")
     result = await Users.get_user_by_token(session, api_key)
     user = result.dict()
+    print(1111, user)
     response = await Tweets.add_like(
         session, tweet_id,
         user["user"]["id"],

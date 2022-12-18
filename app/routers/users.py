@@ -71,14 +71,22 @@ async def get_user(
     return UserOut.parse_obj(user)
 
 
-@router.post(
+@router.delete(
     "/{user_id}/follow",
     summary="Подписывает на пользователя",
     response_model=Success,
     description="Маршрут - позволяет подписаться на другого пользователя.",
     response_description="Успешный ответ",
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
 )
+# @router.post(
+#     "/{user_id}/follow",
+#     summary="Подписывает на пользователя",
+#     response_model=Success,
+#     description="Маршрут - позволяет подписаться на другого пользователя.",
+#     response_description="Успешный ответ",
+#     status_code=status.HTTP_201_CREATED,
+# )
 async def add_following(
         user_id: int,
         api_key: str = Depends(get_apikey_header),
@@ -98,14 +106,22 @@ async def add_following(
     return Success.parse_obj(response)
 
 
-@router.delete(
+@router.post(
     "/{user_id}/follow",
     summary="Отписывает от пользователя",
     response_model=Success,
     description="Маршрут - позволяет отписаться от другого пользователя.",
     response_description="Успешный ответ",
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_201_CREATED,
 )
+# @router.delete(
+#     "/{user_id}/follow",
+#     summary="Отписывает от пользователя",
+#     response_model=Success,
+#     description="Маршрут - позволяет отписаться от другого пользователя.",
+#     response_description="Успешный ответ",
+#     status_code=status.HTTP_200_OK,
+# )
 async def delete_following(
         user_id: int,
         api_key: str = Depends(get_apikey_header),

@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional, Union
 
 import aiofiles
 from fastapi import UploadFile
-from jose import jwt
 from sqlalchemy import (
     Column,
     DateTime,
@@ -21,7 +20,7 @@ from sqlalchemy.orm import relationship, selectinload
 
 from db.database import Base
 from utils.logger import get_logger
-from schemas import (
+from db.schemas import (
     FileSuccess,
     NewTweetOut,
     Success,
@@ -31,7 +30,7 @@ from schemas import (
 )
 from settings import settings, uploaded_file_path
 from utils.errors import AppException, error_handler
-from utils.hashing import Hash
+
 
 logger = get_logger("routers.users")
 
@@ -40,7 +39,6 @@ class Users(Base):
     __tablename__ = "users"
     id: int = Column(Integer(), primary_key=True)
     username: str = Column(String(), nullable=False)
-    password: str = Column(String(), nullable=False)
     api_token: str = Column(Text(), nullable=False)
     following: List["Users"] = relationship(
         "Users",
@@ -60,56 +58,6 @@ class Users(Base):
         lazy="selectin",
         uselist=True,
     )
-
-    @classmethod
-    @error_handler
-    async def add_users(cls, session: AsyncSession) -> None:
-        """
-        Добавление пользователей.
-
-        :param session: AsyncSession
-        :return None: None
-        """
-        async with session.begin():
-            user2 = Users(
-                username="test2",
-                password=Hash.encrypt("password2"),
-                api_token=jwt.encode(
-                    {"api-key": "test2"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                ),
-            )
-            user3 = Users(
-                username="test3",
-                password=Hash.encrypt("password3"),
-                api_token=jwt.encode(
-                    {"api-key": "test3"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                ),
-            )
-            user4 = Users(
-                username="test4",
-                password=Hash.encrypt("password4"),
-                api_token=jwt.encode(
-                    {"api-key": "test4"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                ),
-            )
-
-            user1 = Users(
-                username="david",
-                password=Hash.encrypt("password"),
-                api_token=jwt.encode(
-                    {"api-key": "test"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                ),
-            )
-
-            session.add_all([user1, user2, user3, user4])
 
     @classmethod
     async def get_all_users(

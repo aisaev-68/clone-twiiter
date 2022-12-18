@@ -5,7 +5,7 @@ from db.database import get_db
 from utils.get_token_header import get_apikey_header
 from utils.logger import get_logger
 from db.models import Tweets, Users
-from utils.schemas import NewTweetOut, Success, TweetIn, TweetsOut
+from db.schemas import NewTweetOut, Success, TweetIn, TweetsOut
 
 logger = get_logger("routers.tweets")
 

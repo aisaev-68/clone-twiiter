@@ -21,8 +21,8 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from db.database import Base
-from settings import DATABASE_URL
+from app.db.database import Base
+from app.settings import DATABASE_URL
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

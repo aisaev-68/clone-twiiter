@@ -13,6 +13,7 @@ def get_application() -> FastAPI:
         title="Clone-tweeter",
         description="Итоговый проект по курсу Python advanced. Skiilbox.",
         version="0.1.0",
+        docs_url="/api/docs",
         responses={
             422: {
                 "description": "Ошибка проверки",
@@ -28,9 +29,12 @@ def get_application() -> FastAPI:
 
     origins = [
         "http://localhost:8080",
-        "http://0.0.0.0:8080",
         "http://127.0.0.1:8080",
+        "http://0.0.0.0:8080",
+        "http://localhost",
+        "http://127.0.0.1",
     ]
+
     application.add_middleware(
         CORSMiddleware,
         allow_origins=origins,

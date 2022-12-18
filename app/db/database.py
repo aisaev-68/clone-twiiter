@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from utils.logger import get_logger
-from settings import settings, DATABASE_URL
+from settings import DATABASE_URL
 
 logger = get_logger("routers.tweets")
 
@@ -36,6 +36,7 @@ async def get_db() -> AsyncGenerator:
     :yield: AsyncGenerator
     """
     async with async_session() as session:
+        logger.debug(f"ASYNC Pool: {engine.pool.status()}")
         yield session
 
 async def init_db():
