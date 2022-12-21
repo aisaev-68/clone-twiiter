@@ -43,7 +43,7 @@ class User(Base):
     likes = relationship(
         "Post", secondary=likes,
         backref=backref("likes", lazy="dynamic"),
-        lazy="selectin",
+        lazy="dynamic",
         cascade="all, delete",
     )
 

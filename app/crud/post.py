@@ -2,7 +2,6 @@ from typing import Union, List, Any, Dict, Optional
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 from sqlalchemy import (
     delete,
     select,
@@ -14,7 +13,6 @@ from db.schemas import (
     TweetIn,
 )
 from utils.logger import get_logger
-from utils.errors import AppException, error_handler
 from db.models import Post, likes
 from db.database import get_db
 
