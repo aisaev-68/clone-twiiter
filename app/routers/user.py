@@ -1,12 +1,11 @@
 from typing import Dict
 
-from fastapi import APIRouter, Depends, status
-
-from utils.logger import get_logger
-from db.schemas import Success, UserOut, Failure
 from crud.user import UserService
+from db.schemas import Failure, Success, UserOut
+from fastapi import APIRouter, Depends, status
 from routers.user_current import current_user
 from utils.errors import AppException, error_handler
+from utils.logger import get_logger
 
 logger = get_logger("routers.user")
 

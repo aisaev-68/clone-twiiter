@@ -1,7 +1,7 @@
 from datetime import datetime
-
 from typing import Any, Dict, List, Optional
 
+from db.database import Base
 from sqlalchemy import (
     Column,
     DateTime,
@@ -9,12 +9,10 @@ from sqlalchemy import (
     Integer,
     String,
     Table,
-    Text, func,
+    Text,
+    func,
 )
-
-from sqlalchemy.orm import relationship, backref
-
-from db.database import Base
+from sqlalchemy.orm import backref, relationship
 
 
 class User(Base):

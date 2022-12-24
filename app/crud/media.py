@@ -1,15 +1,13 @@
 import uuid
 from pathlib import Path
 
-from fastapi import Depends
 import aiofiles
-from fastapi import UploadFile
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from utils.logger import get_logger
-from settings import settings, uploaded_file_path
 from db.database import get_db
 from db.models import Media
+from fastapi import Depends, UploadFile
+from settings import settings, uploaded_file_path
+from sqlalchemy.ext.asyncio import AsyncSession
+from utils.logger import get_logger
 
 logger = get_logger("crud.media")
 

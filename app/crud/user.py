@@ -1,20 +1,14 @@
-from typing import Union, List, Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
+from db.database import get_db
+from db.models import Follows, User
+from db.schemas import Success, UserOut
 from fastapi import Depends
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from sqlalchemy import (
-    delete,
-    select,
-)
-from db.schemas import (
-    Success,
-    UserOut,
-)
-from utils.logger import get_logger
 from utils.errors import AppException, error_handler
-from db.models import User, Follows
-from db.database import get_db
+from utils.logger import get_logger
 
 logger = get_logger("crud.user")
 

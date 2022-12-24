@@ -1,11 +1,10 @@
+from crud.user import UserService
 from fastapi import Depends
 from fastapi.security.api_key import APIKeyHeader
 from jose.jwt import encode
-
 from settings import settings
-from utils.logger import get_logger
 from utils.errors import AppException
-from crud.user import UserService
+from utils.logger import get_logger
 
 logger = get_logger("user_current")
 api_key_header = APIKeyHeader(name="api-key", auto_error=False)

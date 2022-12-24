@@ -1,11 +1,10 @@
 import asyncio
 from jose import jwt
-
-
-from utils.logger import get_logger
-from db.database import engine, Base, async_session
+from db.database import Base, async_session, engine
 from db.models import User
+
 from settings import settings
+from utils.logger import get_logger
 
 logger = get_logger("initial_data")
 
