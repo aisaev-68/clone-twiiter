@@ -10,4 +10,3 @@ DATABASE_PORT=5432
 TWEET_MAX_LENGTH=500
 ```
 3. run `docker-compose up`
-4. go to `http://localhost:8090/`
