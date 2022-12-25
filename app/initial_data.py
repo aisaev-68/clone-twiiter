@@ -1,8 +1,8 @@
 import asyncio
-from jose import jwt
+
 from db.database import Base, async_session, engine
 from db.models import User
-
+from jose import jwt
 from settings import settings
 from utils.logger import get_logger
 

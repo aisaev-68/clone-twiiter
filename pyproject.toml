@@ -10,7 +10,6 @@ python = "^3.10"
 asyncpg = "^0.27.0"
 anyio = "^3.6.2"
 fastapi = "^0.88.0"
-sqlalchemy = "^1.4.45"
 greenlet = "^2.0.1"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
 aiofiles = "^22.1.0"
@@ -28,6 +27,8 @@ alembic = "^1.9.0"
 setuptools = "^65.6.3"
 pydantic = "^1.10.2"
 sqlacodegen = {extras = ["citext"], version = "^2.3.0"}
+sqlalchemy = "1.4.35"
+sqlmodel = "^0.0.8"
 
 
 [build-system]

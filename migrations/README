@@ -1,9 +1,0 @@
-Generic single-database configuration with an async dbapi.
-
-
-alembic init -t async migrations
-docker-compose exec web alembic init -t async migrations
-
-docker-compose exec fastapi alembic revision --autogenerate -m migrations
-
-docker-compose exec fastapi alembic upgrade head

@@ -10,3 +10,8 @@ DATABASE_PORT=5432
 TWEET_MAX_LENGTH=500
 ```
 3. run `docker-compose up`
+
+docker-compose exec fastapi alembic init -t async migrations
+docker-compose exec fastapi alembic revision --autogenerate -m "init"
+docker-compose exec fastapi alembic revision --autogenerate -m "init_db"
+docker-compose exec fastapi alembic upgrade head
