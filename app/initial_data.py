@@ -19,49 +19,49 @@ async def init_data():
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
-    logger.info("Добавление тестовых данных")
-
-    session = async_session()
-    session.add_all(
-        [
-            User(
-                username="test",
-                api_token=jwt.encode(
-                    {"api-key": "test"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                )
-            ),
-            User(
-                username="test1",
-                api_token=jwt.encode(
-                    {"api-key": "test1"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                )
-            ),
-            User(
-                username="test2",
-                api_token=jwt.encode(
-                    {"api-key": "test2"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                )
-            ),
-            User(
-                username="test3",
-                api_token=jwt.encode(
-                    {"api-key": "test3"},
-                    settings.secret_key,
-                    algorithm=settings.algorithm,
-                )
-            ),
-        ]
-    )
-    await session.flush()
-    await session.commit()
-
-    logger.info("Тестовые данные добавлены!")
+    # logger.info("Добавление тестовых данных")
+    #
+    # session = async_session()
+    # session.add_all(
+    #     [
+    #         User(
+    #             username="test",
+    #             api_token=jwt.encode(
+    #                 {"api-key": "test"},
+    #                 settings.secret_key,
+    #                 algorithm=settings.algorithm,
+    #             )
+    #         ),
+    #         User(
+    #             username="test1",
+    #             api_token=jwt.encode(
+    #                 {"api-key": "test1"},
+    #                 settings.secret_key,
+    #                 algorithm=settings.algorithm,
+    #             )
+    #         ),
+    #         User(
+    #             username="test2",
+    #             api_token=jwt.encode(
+    #                 {"api-key": "test2"},
+    #                 settings.secret_key,
+    #                 algorithm=settings.algorithm,
+    #             )
+    #         ),
+    #         User(
+    #             username="test3",
+    #             api_token=jwt.encode(
+    #                 {"api-key": "test3"},
+    #                 settings.secret_key,
+    #                 algorithm=settings.algorithm,
+    #             )
+    #         ),
+    #     ]
+    # )
+    # await session.flush()
+    # await session.commit()
+    #
+    # logger.info("Тестовые данные добавлены!")
 
     await engine.dispose()
 

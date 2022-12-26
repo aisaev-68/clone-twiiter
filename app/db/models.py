@@ -28,16 +28,7 @@ class User(Base):
         cascade="all, delete, delete-orphan"
     )
 
-    # followers: List["Follows"] = relationship(
-    #     "Follows",
-    #     back_populates="user",
-    #     foreign_keys="Follows.user_id"
-    # )
-    # follows: List["Follows"] = relationship(
-    #     "Follows",
-    #     back_populates="follows_user",
-    #     foreign_keys="Follows.follows_user_id"
-    # )
+
     followers: List["Follows"] = relationship(
         "User",
         secondary="followings",
