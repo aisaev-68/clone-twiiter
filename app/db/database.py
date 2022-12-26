@@ -1,6 +1,6 @@
 from typing import AsyncGenerator
 
-from settings import DATABASE_URL
+from settings import settings
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -9,7 +9,7 @@ from utils.logger import get_logger
 logger = get_logger("db.database")
 
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(settings.database_url, echo=True)
 
 Base = declarative_base()
 
