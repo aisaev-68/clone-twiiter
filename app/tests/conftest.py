@@ -9,16 +9,16 @@ from main import app
 
 @pytest.fixture()
 async def client():
-    async with AsyncClient(app=app, base_url="http://0.0.0.0") as async_client:
+    async with AsyncClient(app=app, base_url="http://0.0.0.0:8080") as async_client:
         yield async_client
 
 
-# @pytest.yield_fixture
-# async def init_db() -> AsyncGenerator:
-#     """
-#     Генерирует сессию.
-#
-#     :yield: AsyncGenerator
-#     """
-#     async with get_db() as db:
-#         yield db
+@pytest.yield_fixture
+async def init_db() -> AsyncGenerator:
+    """
+    Генерирует сессию.
+
+    :yield: AsyncGenerator
+    """
+    async with get_db() as db:
+        yield db
