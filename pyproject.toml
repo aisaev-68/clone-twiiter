@@ -20,6 +20,9 @@ sqlmodel = "^0.0.8"
 wemake-python-styleguide = "^0.17.0"
 pytest-asyncio = "^0.20.3"
 uvicorn = "^0.20.0"
+python-dotenv = "^0.21.0"
+python-multipart = "^0.0.5"
+alembic = "^1.9.1"
 
 
 [build-system]
