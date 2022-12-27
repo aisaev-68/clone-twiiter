@@ -10,7 +10,7 @@ api_key = "test"
 #     assert response.status_code == 200
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 async def test_user_me(client: AsyncClient):
     response = await client.get("/api/users/me", headers={"api-key": "test"})
     assert response.status_code == 200
