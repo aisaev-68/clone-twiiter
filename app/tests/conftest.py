@@ -13,12 +13,12 @@ async def client():
         yield async_client
 
 
-@pytest.yield_fixture
-async def init_db() -> AsyncGenerator:
-    """
-    Генерирует сессию.
-
-    :yield: AsyncGenerator
-    """
-    async with get_db() as db:
-        yield db
+# @pytest.yield_fixture
+# async def init_db() -> AsyncGenerator:
+#     """
+#     Генерирует сессию.
+#
+#     :yield: AsyncGenerator
+#     """
+#     async with get_db() as db:
+#         yield db

@@ -26,6 +26,7 @@ sqlacodegen = {extras = ["citext"], version = "^2.3.0"}
 sqlalchemy = "1.4.35"
 sqlmodel = "^0.0.8"
 wemake-python-styleguide = "^0.17.0"
+trio = "^0.22.0"
 
 
 [build-system]
