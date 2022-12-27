@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "python-advanced-diploma"
+version = "0.1.0"
+description = "Clone-tweeter"
+authors = ["ramazan_aisaev <aisaev-68@yandex.ru>"]
+readme = "README.md"
+packages = [{include = "python_advanced_diploma"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+asyncpg = "^0.27.0"
+aiofiles = "^22.1.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = "^1.7.4"
+fastapi = "^0.88.0"
+httpx = "^0.23.1"
+pydantic = "^1.10.2"
+sqlalchemy = "1.4.35"
+sqlmodel = "^0.0.8"
+wemake-python-styleguide = "^0.17.0"
+pytest-asyncio = "^0.20.3"
+uvicorn = "^0.20.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
