@@ -17,7 +17,7 @@ async def test_user_me(client: AsyncClient):
     assert response.json() == {
         "result": True,
         "user": {"id": 1,
-                 "name": "david",
+                 "name": "test",
                  "followers": [],
                  "following": []
                  }
@@ -32,7 +32,7 @@ async def test_user_by_id(client: AsyncClient):
         "result": True,
         "user": {
             "id": 1,
-            "name": "david",
+            "name": "test",
             "followers": [],
             "following": []
         }

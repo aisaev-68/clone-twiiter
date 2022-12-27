@@ -1,10 +1,10 @@
-from typing import AsyncGenerator, Generator
+from typing import AsyncGenerator
 
 import pytest
 from httpx import AsyncClient
 
-from app.db.database import get_db
-from app.main import app
+from db.database import get_db
+from main import app
 
 
 @pytest.fixture()
