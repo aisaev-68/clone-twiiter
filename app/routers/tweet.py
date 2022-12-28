@@ -121,22 +121,23 @@ async def del_user_tweet(
     logger.info("Удаление твита пользователя.")
     tweet = await service.get_tweet(user.id, post_id)
     print(7777, tweet)
-    if tweet is not None:
-        if tweet.user_id == user.id:
-            await service.delete_tweet(post_id)
-        else:
-            logger.error(f"Пользователь с {user.id} пытается удалить чужой пост")
-            raise AppException(
-                "User not delete post",
-                "Пользователь с указанным id не может удалить пост",
-            )
-
-    else:
-        logger.error("Пост не найден")
-        raise AppException(
-            "Tweet not found",
-            "Пост не найден",
-        )
+    # if tweet is not None:
+    #     if tweet.user_id == user.id:
+    #         await service.delete_tweet(post_id)
+    #     else:
+    #         logger.error(f"Пользователь с {user.id} пытается удалить чужой пост")
+    #         raise AppException(
+    #             "User not delete post",
+    #             "Пользователь с указанным id не может удалить пост",
+    #         )
+    #
+    # else:
+    #     logger.error("Пост не найден")
+    #     raise AppException(
+    #         "Tweet not found",
+    #         "Пост не найден",
+    #     )
+    await service.delete_tweet(post_id)
 
     return Success.parse_obj({"result": True})
 
