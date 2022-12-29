@@ -1,6 +1,8 @@
 import pytest
 from httpx import AsyncClient
 
+api_key = "test"
+
 
 @pytest.mark.asyncio
 async def test_user_me(client: AsyncClient):
@@ -47,3 +49,4 @@ async def test_unfollow(client: AsyncClient):
     assert response.json() == {
         "result": True
     }
+

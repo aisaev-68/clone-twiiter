@@ -10,13 +10,13 @@ from utils.logger import get_logger
 logger = get_logger("routers.user")
 
 router = APIRouter(
-    prefix="/api/users",
+    # prefix="/api/users",
     tags=["Users"],
 )
 
 
 @router.get(
-    "/me",
+    "/api/users/me",
     response_model=UserOut,
     summary="Показывает данные текущего пользователя",
     description="Маршрут получения информации о текущем пользователе.",
@@ -51,7 +51,7 @@ async def get_user_profile(
 
 
 @router.get(
-    "/{user_id}",
+    "/api/users/{user_id}",
     response_model=UserOut,
     summary="Показывает данные пользователя по id",
     description="Маршрут получения информации о пользователе по ID.",
@@ -90,7 +90,7 @@ async def get_user(
 
 
 @router.delete(
-    "/{user_id}/follow",
+    "/api/users/{user_id}/follow",
     summary="Подписывает на пользователя",
     response_model=Success,
     description="Маршрут - позволяет подписаться на другого пользователя.",
@@ -130,8 +130,8 @@ async def add_following(
 
 
 
-@router.post(
-    "/{user_id}/follow",
+@router.delete(
+    "/api/tweets/{user_id}/follow",
     summary="Отписывает от пользователя",
     response_model=Success,
     description="Маршрут - позволяет отписаться от другого пользователя.",

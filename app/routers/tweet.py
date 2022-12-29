@@ -119,8 +119,8 @@ async def del_user_tweet(
     :return: Возвращает объект согласно схеме Success или Failure
     """
     logger.info("Удаление твита пользователя.")
-    tweet = await service.get_tweet(user.id, post_id)
-    print(7777, tweet)
+    # tweet = await service.get_tweet(user.id, post_id)
+    # print(7777, tweet)
     # if tweet is not None:
     #     if tweet.user_id == user.id:
     #         await service.delete_tweet(post_id)
