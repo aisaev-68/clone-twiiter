@@ -27,7 +27,7 @@ async def test_add_tweets(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_delete_tweets(client: AsyncClient):
-    response = await client.post(
+    response = await client.delete(
         "/api/tweets/1",
         headers={"api-key": "test"},
     )

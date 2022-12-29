@@ -44,7 +44,7 @@ async def test_to_follow(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_unfollow(client: AsyncClient):
-    response = await client.post("/api/users/2/follow", headers={"api-key": "test"})
+    response = await client.delete("/api/tweets/2/follow", headers={"api-key": "test"})
     assert response.status_code == 201
     assert response.json() == {
         "result": True
