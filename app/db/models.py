@@ -83,7 +83,7 @@ class Tweet(Base):
 
     user: Optional["User"] = relationship("User", back_populates="tweets",
                                           foreign_keys=[user_id])
-    likes: List["TweetLikes"] = relationship("TweetLikes", back_populates="tweet", cascade="delete, all")
+    likes: List["TweetLikes"] = relationship("TweetLikes", back_populates="tweet")
 
     tweet_image: List["Media"] = relationship("Media", back_populates="medias")
 
@@ -128,10 +128,12 @@ class TweetLikes(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
     tweet_id = Column(Integer, ForeignKey("tweet.id"))
 
-    user = relationship("User", back_populates="tweet_likes",
-                        foreign_keys=[user_id])
-    tweet = relationship("Tweet", back_populates="likes",
-                         foreign_keys=[tweet_id])
+    # user = relationship("User", back_populates="tweet_likes",
+    #                     foreign_keys=[user_id])
+    # tweet = relationship("Tweet", back_populates="likes",
+    #                      foreign_keys=[tweet_id])
+    user = relationship("User", back_populates="tweet_likes")
+    tweet = relationship("Tweet", back_populates="likes")
 
     def to_json(self):
         return {"user_id": self.user.id,

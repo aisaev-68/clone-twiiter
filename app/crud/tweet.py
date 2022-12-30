@@ -21,7 +21,8 @@ class TweetService:
     def __init__(self, session: AsyncSession = Depends(get_db)):
         self.session = session
 
-    async def get_all_tweets(self, selectionload=None):
+    #, selectionload=None
+    async def get_all_tweets(self):
         """
         Метод для получения всех твитов из базы.
         :param user_id:
@@ -39,7 +40,7 @@ class TweetService:
     async def get_tweet(
             self,
             user_id: int,
-            post_id: int,
+            tweet_id: int,
     ):
         """
         Метод для получения всех твита из базы.
@@ -48,7 +49,7 @@ class TweetService:
         :return: Объект согласно схеме TweetsOut или Failure
         """
 
-        result = await self.session.execute(select(Tweet).where(Tweet.user_id == user_id, Tweet.id == post_id))
+        result = await self.session.execute(select(Tweet).where(Tweet.user_id == user_id, Tweet.id == tweet_id))
         post = result.scalars().first()
 
         return post
@@ -56,7 +57,7 @@ class TweetService:
 
     async def add_new_tweet(
             self,
-            post: TweetIn,
+            tweet: TweetIn,
             user_id: int,
     ):
         """
@@ -68,7 +69,7 @@ class TweetService:
         :return: Объект согласно схеме TweetSuccess
         """
         new_tweet = Tweet(
-            content=post.tweet_data,
+            content=tweet.tweet_data,
             user_id=user_id,
         )
 
@@ -76,7 +77,7 @@ class TweetService:
         await self.session.flush()
         await self.session.commit()
 
-        for tweet_id in post.tweet_media_ids:
+        for tweet_id in tweet.tweet_media_ids:
             result = await self.session.execute(select(Media).where(Media.id == tweet_id))
             media: Optional[Media] = result.scalars().first()
             if media is not None:
@@ -86,15 +87,15 @@ class TweetService:
 
         return new_tweet
 
-    async def delete_tweet(self, post_id: int, ) -> None:
+    async def delete_tweet(self, tweet_id: int, user_id: int) -> None:
         """
         Метод для удаления твита пользователя.
 
-        :param post_id: ID твита для удаления
+        :param tweet_id: ID твита для удаления
         :param user_id: ID пользователя, который хочет удалить твит
         :return: Объект согласно схеме Success или Failure
         """
-        all_medias = await self.session.execute(select(Media).where(Media.tweet_id == post_id))
+        all_medias = await self.session.execute(select(Media).where(Media.tweet_id == tweet_id))
         media: List[Media] = all_medias.scalars().all()
 
         if media is not None:
@@ -102,15 +103,15 @@ class TweetService:
                 await self.session.execute(delete(Media).where(Media.tweet_id == tweet_file.tweet_id))
                 file_path = Path(str(tweet_file.path_file))
                 file_path.unlink()
-
-        await self.session.execute(delete(Tweet).where(Tweet.id == post_id))
+        await self.session.execute(delete(TweetLikes).where(TweetLikes.tweet_id == tweet_id, TweetLikes.user_id == user_id))
+        await self.session.execute(delete(Tweet).where(Tweet.id == tweet_id, Tweet.user_id == user_id))
         await self.session.commit()
 
 
 
     async def add_like(
             self,
-            post_id: int,
+            tweet_id: int,
             user_id: int,
     ):
         """
@@ -120,7 +121,7 @@ class TweetService:
         :param user_id: ID пользователя которых хочет поставить
         :return: Объект согласно схеме Success или Failure
         """
-        new_like = TweetLikes(tweet_id=post_id, user_id=user_id)
+        new_like = TweetLikes(tweet_id=tweet_id, user_id=user_id)
         self.session.add(new_like)
         await self.session.flush()
         await self.session.commit()
@@ -129,7 +130,7 @@ class TweetService:
 
     async def delete_like(
             self,
-            post_id: int,
+            tweet_id: int,
             user_id: int,
     ):
         """
@@ -141,7 +142,7 @@ class TweetService:
         """
         query = delete(TweetLikes).where(
             TweetLikes.user_id == user_id,
-            TweetLikes.tweet_id == post_id,
+            TweetLikes.tweet_id == tweet_id,
         )
         await self.session.execute(query)
         await self.session.commit()

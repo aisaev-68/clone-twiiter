@@ -49,11 +49,11 @@ async def show_all_tweets(
             "id not found",
             "Пользователь с указанным id отсутствует в базе",
         )
-    posts = await service.get_all_tweets()
+    tweets = await service.get_all_tweets()
     lst = []
-    print(8888, posts) #8888 [(Post,), (Post,), (Post,), (Post,), (Post,)]
-    for post in posts:
-        obj = post[0].to_json()
+    print(8888, tweets) #8888 [(Post,), (Post,), (Post,), (Post,), (Post,)]
+    for tweet in tweets:
+        obj = tweet[0].to_json()
         lst.append(obj)
 
     return TweetsOut.parse_obj({
@@ -72,32 +72,32 @@ async def show_all_tweets(
 )
 @error_handler
 async def add_tweet(
-        post: TweetIn,
+        tweet: TweetIn,
         user: current_user = Depends(),
         service: TweetService = Depends(),
 ) -> NewTweetOut | Failure:
     """
     Endpoint добавления нового твита пользователя.
 
-    :param post: Объект полученный согласно схеме TweetIn
+    :param tweet: Объект полученный согласно схеме TweetIn
     :param user:
     :param service:
     :return: Объект согласно схеме NewTweetOut
     """
     logger.info("Добавления нового твита пользователя.")
-    new_post = await service.add_new_tweet(
-        post,
-        int(user.id),
+    new_tweet = await service.add_new_tweet(
+        tweet,
+        user.id,
     )
 
     return NewTweetOut.parse_obj({
         "result": True,
-        "tweet_id": new_post.id,
+        "tweet_id": new_tweet.id,
     })
 
 
 @router.delete(
-    "/{post_id}",
+    "/{tweet_id}",
     summary="Удаляет твит с заданным ID",
     response_model=Success,
     description="Маршрут для удаления твита с заданным ID.",
@@ -105,30 +105,30 @@ async def add_tweet(
     status_code=status.HTTP_200_OK,
     )
 @error_handler
-async def del_user_tweet(
-        post_id: int,
+async def delete_tweet(
+        tweet_id: int,
         user: current_user = Depends(),
         service: TweetService = Depends(),
         ) -> Success | Failure:
     """
     Endpoint для удаления твита с заданным ID.
 
-    :param post_id: ID твита для удаления
+    :param tweet_id: ID твита для удаления
     :param user:
     :param service:
     :return: Возвращает объект согласно схеме Success или Failure
     """
     logger.info("Удаление твита пользователя.")
-    tweet = await service.get_tweet(user.id, post_id)
+    tweet = await service.get_tweet(user.id, tweet_id)
     print(7777, tweet)
     if tweet is not None:
         if tweet.user_id == user.id:
-            await service.delete_tweet(post_id)
+            await service.delete_tweet(tweet_id, user.id)
         else:
             logger.error(f"Пользователь с {user.id} пытается удалить чужой пост")
             raise AppException(
                 "User not delete post",
-                "Пользователь с указанным id не может удалить пост",
+                f"Пользователь с указанным {user.id} не может удалить пост",
             )
 
     else:
@@ -137,6 +137,7 @@ async def del_user_tweet(
             "Tweet not found",
             "Пост не найден",
         )
+
 
     return Success.parse_obj({"result": True})
 
