@@ -122,15 +122,7 @@ async def delete_tweet(
     tweet = await service.get_tweet(user.id, tweet_id)
     print(7777, tweet)
     if tweet is not None:
-        if tweet.user_id == user.id:
-            await service.delete_tweet(tweet_id, user.id)
-        else:
-            logger.error(f"Пользователь с {user.id} пытается удалить чужой пост")
-            raise AppException(
-                "User not delete post",
-                f"Пользователь с указанным {user.id} не может удалить пост",
-            )
-
+        await service.delete_tweet(tweet_id, user.id)
     else:
         logger.error("Пост не найден")
         raise AppException(
