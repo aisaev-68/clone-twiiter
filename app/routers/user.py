@@ -120,10 +120,10 @@ async def add_following(
 
     result = await service.follow(user_id, user.id)
     if not result:
-        logger.error("Пользователь подписан")
+        logger.error("Ошибка при подписке")
         raise AppException(
-            "Followers found",
-            "Пользователь подписан",
+            "Followers not found",
+            "Ошибка при подписке",
         )
 
     return Success.parse_obj({"result": True})

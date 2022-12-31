@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 @router.delete(
-    "/{post_id}/likes",
+    "/{tweet_id}/likes",
     summary="Удаляет лайк твита с заданным ID",
     response_model=Success,
     description="Маршрут для удаления лайка твита с заданным ID.",
@@ -22,14 +22,14 @@ router = APIRouter(
 )
 @error_handler
 async def delete_like(
-        post_id: int,
+        tweet_id: int,
         user: current_user = Depends(),
         service: TweetService = Depends(),
 ) -> Success | Failure:
     """
     Endpoint для удаления лайка твиту с заданным ID.
 
-    :param post_id: ID твита для удаления лайка
+    :param tweet_id: ID твита для удаления лайка
     :param user:
     :param service:
     :return: Возвращает объект согласно схеме Success или Failure
@@ -43,14 +43,14 @@ async def delete_like(
         )
 
     await service.delete_like(
-        post_id,
+        tweet_id,
         user.id,
     )
     return Success.parse_obj({"result": True})
 
 
 @router.post(
-    "/{post_id}/likes",
+    "/{tweet_id}/likes",
     summary="Добавляет лайк твиту с заданным ID",
     response_model=Success,
     description="Маршрут для добавления лайка твиту с заданным ID.",
@@ -59,14 +59,14 @@ async def delete_like(
 )
 @error_handler
 async def like_tweet(
-        post_id: int,
+        tweet_id: int,
         user: current_user = Depends(),
         service: TweetService = Depends(),
 ) -> Success | Failure:
     """
     Endpoint для добавления лайка твиту с заданным ID.
 
-    :param post_id: ID твита для добавления лайка
+    :param tweet_id: ID твита для добавления лайка
     :param user:
     :param service: AsyncSession
     :return: Возвращает объект согласно схеме Success или Failure
@@ -80,7 +80,7 @@ async def like_tweet(
         )
 
     await service.add_like(
-        post_id,
+        tweet_id,
         user.id,
     )
 

@@ -32,13 +32,11 @@ class MediaService:
         """
         home = uploaded_file_path
         filename = str(uuid.uuid4())
-        file_name_extension = file.filename.split(".")[1]
-        file_name = "{0}.{1}".format(filename, file_name_extension)
-        file_path = "images/{image_name}".format(image_name=file_name)
-        path_absolute = str(Path(home, file_name))
+        file_path = "images/{image_name}".format(image_name=filename)
+        path_absolute = str(Path(home, filename))
+
         add_img = Media(path_file=file_path)
         self.session.add(add_img)
-
         await self.session.commit()
 
         async with aiofiles.open(path_absolute, mode="wb") as file_image:

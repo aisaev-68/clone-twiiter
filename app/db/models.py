@@ -50,7 +50,7 @@ class User(Base):
     tweet_likes = relationship("TweetLikes", back_populates="user")
 
     def __repr__(self):
-        return f"User ('{self.username}')"
+        return f"{self.__class__.__name__}, ({self.id}, {self.username})"
 
     def to_json(self) -> Dict[str, Any]:
         return {

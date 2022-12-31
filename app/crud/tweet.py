@@ -21,7 +21,7 @@ class TweetService:
     def __init__(self, session: AsyncSession = Depends(get_db)):
         self.session = session
 
-    #, selectionload=None
+    # , selectionload=None
     async def get_all_tweets(self):
         """
         Метод для получения всех твитов из базы.
@@ -53,7 +53,6 @@ class TweetService:
         post = result.scalars().first()
 
         return post
-
 
     async def add_new_tweet(
             self,
@@ -103,11 +102,10 @@ class TweetService:
                 await self.session.execute(delete(Media).where(Media.tweet_id == tweet_file.tweet_id))
                 file_path = Path(str(tweet_file.path_file))
                 file_path.unlink()
-        await self.session.execute(delete(TweetLikes).where(TweetLikes.tweet_id == tweet_id, TweetLikes.user_id == user_id))
+        await self.session.execute(
+            delete(TweetLikes).where(TweetLikes.tweet_id == tweet_id, TweetLikes.user_id == user_id))
         await self.session.execute(delete(Tweet).where(Tweet.id == tweet_id, Tweet.user_id == user_id))
         await self.session.commit()
-
-
 
     async def add_like(
             self,
@@ -117,7 +115,7 @@ class TweetService:
         """
         Метод для добавления лайка с твита пользователя.
 
-        :param post_id: ID твита на который нужно поставить
+        :param tweet_id: ID твита на который нужно поставить
         :param user_id: ID пользователя которых хочет поставить
         :return: Объект согласно схеме Success или Failure
         """
@@ -136,7 +134,7 @@ class TweetService:
         """
         Метод для удаления лайка с твита пользователя.
 
-        :param post_id: ID твита на который нужно поставить/удалить лайк
+        :param tweet_id: ID твита на который нужно поставить/удалить лайк
         :param user_id: ID пользователя которых хочет поставить/удалить лайк
         :return: Объект согласно схеме Success или Failure
         """

@@ -92,21 +92,23 @@ class UserService:
         :param current_user_id: ID пользователя который подписывается
         :return: Объект согласно схеме Success или Failure
         """
-        # result = True
+
         result = await self.session.execute(select(User).where(
             User.id == current_user_id).options(
             selectinload(User.followers), selectinload(User.follows)))
 
-        to_follow = result.scalars().first()
+        to_follow: Optional[User] = result.scalars().first()
         following_id = [user.id for user in to_follow.followers]
-        print(user_to_follow, following_id)
-        if user_to_follow in following_id:
-            return False
+        user = await self.session.execute(select(User).where(User.id == user_to_follow))
+        user = user.one_or_none()
 
-        self.session.add(Follows(user_id=current_user_id, follows_user_id=user_to_follow))
-        await self.session.flush()
-        await self.session.commit()
-        return True
+        if user is not None and user_to_follow not in following_id:
+            self.session.add(Follows(user_id=current_user_id, follows_user_id=user_to_follow))
+            await self.session.flush()
+            await self.session.commit()
+            return True
+        else:
+            return False
 
     async def unfollow(self, user_un_follow: int,
                        current_user_id: int) -> Success:

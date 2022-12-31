@@ -21,7 +21,7 @@ async def test_add_tweets(client: AsyncClient):
     assert response.status_code == 201
     assert response.json() == {
         "result": True,
-        "tweet_id": 1,
+        "tweet_id": 2,
     }
 
 

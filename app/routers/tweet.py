@@ -124,12 +124,11 @@ async def delete_tweet(
     if tweet is not None:
         await service.delete_tweet(tweet_id, user.id)
     else:
-        logger.error("Пост не найден")
+        logger.error("Tweet не найден")
         raise AppException(
             "Tweet not found",
-            "Пост не найден",
+            "Tweet не найден",
         )
-
 
     return Success.parse_obj({"result": True})
 
