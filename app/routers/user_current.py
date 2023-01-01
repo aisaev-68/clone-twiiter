@@ -1,12 +1,12 @@
 from typing import Union
-
-from crud.user import UserService
 from fastapi import Depends
 from fastapi.security.api_key import APIKeyHeader
 from jose.jwt import encode
+
+from crud.user import UserService
+from db.models import User
 from settings import settings
 from utils.logger import get_logger
-from db.models import User
 
 logger = get_logger("user_current")
 api_key_header = APIKeyHeader(name="api-key", auto_error=False)

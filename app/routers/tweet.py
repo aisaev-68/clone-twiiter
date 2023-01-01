@@ -1,4 +1,5 @@
-from typing import Dict, Union
+from typing import Union
+from fastapi import APIRouter, Depends, status
 
 from crud.tweet import TweetService
 from db.schemas import (
@@ -9,7 +10,6 @@ from db.schemas import (
     TweetsOut,
     UserOut,
 )
-from fastapi import APIRouter, Depends, status
 from routers.user_current import current_user
 from utils.errors import AppException, error_handler
 from utils.logger import get_logger
@@ -48,7 +48,7 @@ async def show_all_tweets(
 
     return AppException(
         "id not found",
-        "Пользователь с указанным id отсутствует в базе"
+        "Пользователь с указанным id отсутствует в базе",
     ) if user is None else TweetsOut.parse_obj(
         {
             "result": True,
@@ -126,6 +126,6 @@ async def delete_tweet(
 
     return Success.parse_obj(
         {
-            "result": True
-        }
+            "result": True,
+        },
     )

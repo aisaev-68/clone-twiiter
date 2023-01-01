@@ -1,18 +1,10 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, func
+from sqlalchemy.orm import relationship
+
 from db.database import Base
-from sqlalchemy import (
-    Column,
-    DateTime,
-    ForeignKey,
-    Integer,
-    String,
-    Table,
-    Text,
-    func,
-)
-from sqlalchemy.orm import backref, relationship
 
 
 class User(Base):
@@ -20,14 +12,13 @@ class User(Base):
     id: int = Column(Integer, primary_key=True)
     username: str = Column(String(25), unique=True, nullable=False)
     api_token: str = Column(Text(), nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
 
     tweets: List["Tweet"] = relationship(
         "Tweet",
         back_populates="user",
         cascade="all, delete, delete-orphan"
     )
-
 
     followers: List["Follows"] = relationship(
         "User",
@@ -50,7 +41,11 @@ class User(Base):
     tweet_likes = relationship("TweetLikes", back_populates="user")
 
     def __repr__(self):
-        return f"{self.__class__.__name__}, ({self.id}, {self.username})"
+        return "{name}, ({id}, username})".format(
+            name=self.__class__.__name__,
+            id=self.id,
+            username=self.username
+        )
 
     def to_json(self) -> Dict[str, Any]:
         return {
@@ -76,10 +71,10 @@ class User(Base):
 class Tweet(Base):
     __tablename__ = "tweet"
 
-    id = Column(Integer, primary_key=True, index=True)
-    content = Column(String, index=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    user_id = Column(Integer, ForeignKey("user.id"))
+    id: int = Column(Integer, primary_key=True, index=True)
+    content: str = Column(String, index=True)
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+    user_id: int = Column(Integer, ForeignKey("user.id"))
 
     user: Optional["User"] = relationship("User", back_populates="tweets")
     likes: List["TweetLikes"] = relationship("TweetLikes", back_populates="tweet")
@@ -87,7 +82,12 @@ class Tweet(Base):
     tweet_image: List["Media"] = relationship("Media", back_populates="medias")
 
     def __repr__(self):
-        return f"Tweet ({self.id}', '{self.content}', '{self.created_at}')"
+        return "{name} ({id}, {content}, {date_create})".format(
+            name=self.__class__.__name__,
+            id=self.id,
+            content=self.content,
+            date_create=self.created_at
+        )
 
     def to_json(self) -> Dict[str, Any]:
         return {
@@ -109,28 +109,18 @@ class Follows(Base):
     """
     __tablename__ = "followings"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.id"))
-    follows_user_id = Column(Integer, ForeignKey("user.id"))
-
-    # user: Optional["User"] = relationship("User", back_populates="follows",
-    #                                       foreign_keys=[user_id])
-    # follows_user: Optional["User"] = relationship(
-    #     "User", back_populates="followers", foreign_keys=[follows_user_id])
-
+    id: int = Column(Integer, primary_key=True, index=True)
+    user_id: int = Column(Integer, ForeignKey("user.id"))
+    follows_user_id: int = Column(Integer, ForeignKey("user.id"))
 
 
 class TweetLikes(Base):
     __tablename__ = "tweet_likes"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.id"))
-    tweet_id = Column(Integer, ForeignKey("tweet.id"))
+    id: int = Column(Integer, primary_key=True, index=True)
+    user_id: int = Column(Integer, ForeignKey("user.id"))
+    tweet_id: int = Column(Integer, ForeignKey("tweet.id"))
 
-    # user = relationship("User", back_populates="tweet_likes",
-    #                     foreign_keys=[user_id])
-    # tweet = relationship("Tweet", back_populates="likes",
-    #                      foreign_keys=[tweet_id])
     user = relationship("User", back_populates="tweet_likes")
     tweet = relationship("Tweet", back_populates="likes")
 
@@ -147,7 +137,12 @@ class Media(Base):
     medias: Optional["Tweet"] = relationship("Tweet", back_populates="tweet_image")
 
     def __repr__(self):
-        return f"Media ({self.id}', '{self.tweet_id}', '{self.path_file}')"
+        return "{name} ({id}', '{tweet_id}', '{path_file}')".format(
+            name=self.__class__.__name__,
+            id=self.id,
+            tweet_id=self.tweet_id,
+            path_file=self.path_file
+        )
 
     def to_json(self) -> Dict[str, Any]:
         return {

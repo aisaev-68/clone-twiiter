@@ -1,8 +1,9 @@
 from typing import Union
 
+from fastapi import APIRouter, Depends, status
+
 from crud.tweet import TweetService
 from db.schemas import Failure, Success
-from fastapi import APIRouter, Depends, status
 from routers.user_current import current_user
 from utils.errors import AppException, error_handler
 from utils.logger import get_logger
@@ -13,6 +14,7 @@ router = APIRouter(
     prefix="/api/tweets",
     tags=["Likes"],
 )
+
 
 @router.delete(
     "/{tweet_id}/likes",
@@ -46,8 +48,8 @@ async def delete_like(
     )
     return Success.parse_obj(
         {
-            "result": True
-        }
+            "result": True,
+        },
     )
 
 
@@ -84,6 +86,6 @@ async def like_tweet(
 
     return Success.parse_obj(
         {
-            "result": True
-        }
+            "result": True,
+        },
     )

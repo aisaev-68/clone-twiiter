@@ -1,13 +1,14 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 
-from db.database import get_db
-from db.models import Media, Tweet, TweetLikes
-from db.schemas import NewTweetOut, Success, TweetIn, TweetsOut
 from fastapi import Depends
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+
+from db.database import get_db
+from db.models import Media, Tweet, TweetLikes
+from db.schemas import NewTweetOut, Success, TweetIn, TweetsOut
 from utils.logger import get_logger
 
 logger = get_logger("crud.post")
@@ -31,9 +32,9 @@ class TweetService:
 
         result = await self.session.execute(
             select(Tweet).order_by(Tweet.created_at.desc()).options(
-            selectinload(Tweet.likes),
-            selectinload(Tweet.tweet_image),
-            selectinload(Tweet.user)))
+                selectinload(Tweet.likes),
+                selectinload(Tweet.tweet_image),
+                selectinload(Tweet.user)))
         posts = result.all()
 
         return posts
@@ -80,7 +81,6 @@ class TweetService:
         self.session.add(new_tweet)
         await self.session.flush()
         await self.session.commit()
-
 
         for tweet_id in tweet.tweet_media_ids:
             result = await self.session.execute(select(Media).where(Media.id == tweet_id))

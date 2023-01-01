@@ -1,8 +1,8 @@
 from typing import Union
+from fastapi import APIRouter, Depends, File, UploadFile, status
 
 from crud.media import MediaService
 from db.schemas import Failure, FileSuccess
-from fastapi import APIRouter, Depends, File, UploadFile, status
 from routers.user_current import current_user
 from utils.errors import AppException, error_handler
 from utils.logger import get_logger
@@ -39,14 +39,14 @@ async def get_new_file(
     """
     logger.info("Сохранение файла из твита пользователя.")
     if user is None:
-        raise AppException(
+        AppException(
             "api-key not found",
             "Пользовател с таким api-key отстутствует в базе",
         )
 
-    return FileSuccess.parse_obj(
-        {
-            "result": True,
-            "media_id": (await service.write_file(file)),
-        }
-    )
+    file_id = await service.write_file(file)
+
+    return FileSuccess.parse_obj({
+        "result": True,
+        "media_id": file_id,
+    })

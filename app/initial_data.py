@@ -1,8 +1,8 @@
 import asyncio
+from jose import jwt
 
 from db.database import Base, async_session, engine
 from db.models import User
-from jose import jwt
 from settings import settings
 from utils.logger import get_logger
 
@@ -64,6 +64,7 @@ async def init_data():
     logger.info("Тестовые данные добавлены!")
 
     await engine.dispose()
+
 
 if __name__ == '__main__':
     asyncio.run(init_data())

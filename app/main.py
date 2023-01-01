@@ -1,14 +1,19 @@
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from db.schemas import Failure
 from routers import like, media, tweet, user
 from utils.logger import get_logger
-from db.schemas import Failure
 
 logger = get_logger("main")
 
 
-def get_application() -> FastAPI:
+async def get_application() -> FastAPI:
+    """
+    Фабрика приложения.
+
+    :return: Fastapi
+    """
     application = FastAPI(
         title="Clone-tweeter",
         description="Итоговый проект по курсу Python advanced. Skiilbox.",
@@ -40,7 +45,7 @@ def get_application() -> FastAPI:
         allow_origins=origins,
         allow_credentials=True,
         allow_methods=["*"],
-        allow_headers=["*"]
+        allow_headers=["*"],
     )
 
     return application

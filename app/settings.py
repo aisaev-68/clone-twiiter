@@ -12,26 +12,9 @@ class Settings(BaseSettings):
     algorithm: str
     secret_key: str
 
-    # @property
-    # def database_url(self) -> str:
-    #     """
-    #     Assemble Database URL from settings.
-    #     :return: Database URL.
-    #     """
-    #
-    #     return "postgresql+asyncpg://{0}:{1}@{2}:{3}/{4}".format(
-    #         self.db_user,
-    #         self.db_password,
-    #         self.db_host,
-    #         self.db_port,
-    #         self.db_name,
-    #     )
-
     class Config:
         env_file = "../.env"
         env_file_encoding = "utf-8"
-
-
 
 
 settings = Settings()

@@ -18,17 +18,28 @@ async def test_add_tweets(client: AsyncClient):
         },
         headers={"api-key": "test"},
     )
+    id_tweet = response.json()["tweet_id"]
+
     assert response.status_code == 201
     assert response.json() == {
         "result": True,
-        "tweet_id": 2,
+        "tweet_id": id_tweet,
     }
 
 
 @pytest.mark.asyncio
-async def test_delete_tweets(client: AsyncClient):
+async def test_add_tweets_likes(client: AsyncClient):
+    response = await client.post("/api/tweets/1/likes", headers={"api-key": "test"})
+    assert response.status_code == 201
+    assert response.json() == {
+        "result": True,
+    }
+
+
+@pytest.mark.asyncio
+async def test_delete_tweets_likes(client: AsyncClient):
     response = await client.delete(
-        "/api/tweets/1",
+        "/api/tweets/1/likes",
         headers={"api-key": "test"},
     )
     assert response.status_code == 200
@@ -36,16 +47,31 @@ async def test_delete_tweets(client: AsyncClient):
         "result": True,
     }
 
+
+@pytest.mark.asyncio
+async def test_delete_tweets(client: AsyncClient):
+    resp = await client.get("/api/tweets", headers={"api-key": "test"})
+    id = resp.json()["tweets"][0]["id"]
+    response = await client.delete(
+        f"/api/tweets/{id}",
+        headers={"api-key": "test"},
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "result": True,
+    }
+
+
 @pytest.mark.asyncio
 async def test_delete_tweets_other_user(client: AsyncClient):
-    res = (await client.post(
+    res = await client.post(
         "/api/tweets",
         json={
             "tweet_data": "Чужой твит",
             "tweet_media_ids": [1],
         },
         headers={"api-key": "test1"},
-    ))
+    )
     id_tweet = res.json()["tweet_id"]
     response = await client.delete(
         f"/api/tweets/{id_tweet}",
