@@ -5,7 +5,9 @@ api_key = "test"
 
 
 @pytest.mark.asyncio
+# @pytest.mark.filterwarnings("ignore:response")
 async def test_user_me(client: AsyncClient):
+
     response = await client.get("/api/users/me", headers={"api-key": "test"},)
     assert response.status_code == 200
     assert response.json() == {

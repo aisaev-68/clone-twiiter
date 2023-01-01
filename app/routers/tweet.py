@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union
 
 from crud.tweet import TweetService
 from db.schemas import (
@@ -24,17 +24,17 @@ router = APIRouter(
 
 @router.get(
     "",
-    response_model=TweetsOut,
+    response_model=Union[TweetsOut, Failure],
     summary="Показать все твиты пользователей",
     description="Маршрут для отображения всех твитов.",
     response_description="Успешный ответ",
     status_code=status.HTTP_200_OK,
-    )
+)
 @error_handler
 async def show_all_tweets(
         user: current_user = Depends(),
         service: TweetService = Depends(),
-        ) -> TweetsOut | Failure:
+) -> Union[TweetsOut, Failure]:
     """
     Endpoint для отображения всех твитов.
 
@@ -43,28 +43,22 @@ async def show_all_tweets(
     :return: Объект согласно схеме TweetOut или Failure
     """
     logger.info("Получение всех твитов.")
-    if user is None:
-        logger.error("Пользователь с указанным id отсутствует в базе")
-        raise AppException(
-            "id not found",
-            "Пользователь с указанным id отсутствует в базе",
-        )
-    tweets = await service.get_all_tweets()
-    lst = []
-    print(8888, tweets) #8888 [(Post,), (Post,), (Post,), (Post,), (Post,)]
-    for tweet in tweets:
-        obj = tweet[0].to_json()
-        lst.append(obj)
 
-    return TweetsOut.parse_obj({
-        "result": True,
-        "tweets": lst,
-    })
+    tweets = await service.get_all_tweets()
+
+    return AppException(
+        "id not found",
+        "Пользователь с указанным id отсутствует в базе"
+    ) if user is None else TweetsOut.parse_obj(
+        {
+            "result": True,
+            "tweets": [tweet[0].to_json() for tweet in tweets],
+        })
 
 
 @router.post(
     "",
-    response_model=NewTweetOut,
+    response_model=Union[NewTweetOut, Failure],
     summary="Добавить новый твит пользователя",
     description="Маршрут для добавления нового твита пользователя.",
     response_description="Успешный ответ",
@@ -75,7 +69,7 @@ async def add_tweet(
         tweet: TweetIn,
         user: current_user = Depends(),
         service: TweetService = Depends(),
-) -> NewTweetOut | Failure:
+) -> Union[NewTweetOut, Failure]:
     """
     Endpoint добавления нового твита пользователя.
 
@@ -85,31 +79,35 @@ async def add_tweet(
     :return: Объект согласно схеме NewTweetOut
     """
     logger.info("Добавления нового твита пользователя.")
-    new_tweet = await service.add_new_tweet(
-        tweet,
-        user.id,
-    )
 
-    return NewTweetOut.parse_obj({
+    return AppException(
+        "Tweet not found",
+        "Tweet не найден",
+    ) if user is None else NewTweetOut.parse_obj({
         "result": True,
-        "tweet_id": new_tweet.id,
+        "tweet_id": (
+            await service.add_new_tweet(
+                tweet,
+                user.id,
+            )
+        )["tweet_id"],
     })
 
 
 @router.delete(
     "/{tweet_id}",
     summary="Удаляет твит с заданным ID",
-    response_model=Success,
+    response_model=Union[Success, Failure],
     description="Маршрут для удаления твита с заданным ID.",
     response_description="Успешный ответ",
     status_code=status.HTTP_200_OK,
-    )
+)
 @error_handler
 async def delete_tweet(
         tweet_id: int,
         user: current_user = Depends(),
         service: TweetService = Depends(),
-        ) -> Success | Failure:
+) -> Union[Success, Failure]:
     """
     Endpoint для удаления твита с заданным ID.
 
@@ -120,15 +118,14 @@ async def delete_tweet(
     """
     logger.info("Удаление твита пользователя.")
     tweet = await service.get_tweet(user.id, tweet_id)
-    print(7777, tweet)
-    if tweet is not None:
-        await service.delete_tweet(tweet_id, user.id)
-    else:
-        logger.error("Tweet не найден")
-        raise AppException(
-            "Tweet not found",
-            "Tweet не найден",
-        )
 
-    return Success.parse_obj({"result": True})
+    AppException(
+        "Tweet not found",
+        "Tweet не найден",
+    ) if tweet is None else await service.delete_tweet(tweet_id)
 
+    return Success.parse_obj(
+        {
+            "result": True
+        }
+    )

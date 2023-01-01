@@ -29,7 +29,8 @@ class TweetService:
         :return: Объект согласно схеме TweetsOut или Failure
         """
 
-        result = await self.session.execute(select(Tweet).options(
+        result = await self.session.execute(
+            select(Tweet).order_by(Tweet.created_at.desc()).options(
             selectinload(Tweet.likes),
             selectinload(Tweet.tweet_image),
             selectinload(Tweet.user)))
@@ -41,7 +42,7 @@ class TweetService:
             self,
             user_id: int,
             tweet_id: int,
-    ):
+    ) -> Union[Tweet, None]:
         """
         Метод для получения всех твита из базы.
         :param user_id:
@@ -49,10 +50,14 @@ class TweetService:
         :return: Объект согласно схеме TweetsOut или Failure
         """
 
-        result = await self.session.execute(select(Tweet).where(Tweet.user_id == user_id, Tweet.id == tweet_id))
-        post = result.scalars().first()
+        result = await self.session.execute(
+            select(Tweet).where(
+                Tweet.user_id == user_id,
+                Tweet.id == tweet_id
+            ))
+        tweet: Union[Tweet, None] = result.scalars().first()
 
-        return post
+        return tweet
 
     async def add_new_tweet(
             self,
@@ -67,7 +72,7 @@ class TweetService:
         :param: file:
         :return: Объект согласно схеме TweetSuccess
         """
-        new_tweet = Tweet(
+        new_tweet: Optional[Tweet] = Tweet(
             content=tweet.tweet_data,
             user_id=user_id,
         )
@@ -75,6 +80,7 @@ class TweetService:
         self.session.add(new_tweet)
         await self.session.flush()
         await self.session.commit()
+
 
         for tweet_id in tweet.tweet_media_ids:
             result = await self.session.execute(select(Media).where(Media.id == tweet_id))
@@ -84,9 +90,9 @@ class TweetService:
                 await self.session.flush()
                 await self.session.commit()
 
-        return new_tweet
+        return {"tweet_id": new_tweet.id}
 
-    async def delete_tweet(self, tweet_id: int, user_id: int) -> None:
+    async def delete_tweet(self, tweet_id: int) -> None:
         """
         Метод для удаления твита пользователя.
 
@@ -94,7 +100,10 @@ class TweetService:
         :param user_id: ID пользователя, который хочет удалить твит
         :return: Объект согласно схеме Success или Failure
         """
-        all_medias = await self.session.execute(select(Media).where(Media.tweet_id == tweet_id))
+        all_medias = await self.session.execute(
+            select(Media).where(
+                Media.tweet_id == tweet_id
+            ))
         media: List[Media] = all_medias.scalars().all()
 
         if media is not None:
@@ -103,8 +112,9 @@ class TweetService:
                 file_path = Path(str(tweet_file.path_file))
                 file_path.unlink()
         await self.session.execute(
-            delete(TweetLikes).where(TweetLikes.tweet_id == tweet_id, TweetLikes.user_id == user_id))
-        await self.session.execute(delete(Tweet).where(Tweet.id == tweet_id, Tweet.user_id == user_id))
+            delete(TweetLikes).where(TweetLikes.tweet_id == tweet_id))
+        # , TweetLikes.user_id == user_id
+        await self.session.execute(delete(Tweet).where(Tweet.id == tweet_id))
         await self.session.commit()
 
     async def add_like(

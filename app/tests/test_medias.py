@@ -2,7 +2,6 @@ import pytest
 from httpx import AsyncClient
 import aiofiles
 
-
 @pytest.mark.asyncio
 async def test_add_media(client: AsyncClient):
 

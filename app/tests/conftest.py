@@ -16,4 +16,3 @@ def event_loop():
 async def client():
     async with AsyncClient(app=app, base_url="http://0.0.0.0:8080") as async_client:
         yield async_client
-

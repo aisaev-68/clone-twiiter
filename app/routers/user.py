@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Union
 
 from crud.user import UserService
 from db.schemas import Failure, Success, UserOut
@@ -17,7 +17,7 @@ router = APIRouter(
 
 @router.get(
     "/api/users/me",
-    response_model=UserOut,
+    response_model=Union[UserOut, Failure],
     summary="Показывает данные текущего пользователя",
     description="Маршрут получения информации о текущем пользователе.",
     response_description="Успешный ответ",
@@ -26,7 +26,7 @@ router = APIRouter(
 @error_handler
 async def get_user_profile(
         user: current_user = Depends(),
-) -> UserOut | Failure:
+) -> Union[UserOut, Failure]:
     """
     Маршрут получения информации о текущем пользователе.
 
@@ -36,23 +36,22 @@ async def get_user_profile(
     logger.info(
         "Получение информации о текущем пользователе.",
     )
-
-    if user.api_token is None:
-        logger.error("Пользователь не ввел api-key млм пользователь с указанным api-key отсутствует в базе")
-        raise AppException(
-            "api-key not found",
-            "Пользователь с указанным api-key отсутствует в базе",
-        )
-    # print(9999, user.to_json())
-    response = {"result": True,
-                "user": user.to_json(),
-                }
-    return UserOut.parse_obj(response)
+    return (AppException(
+        "api-key not found",
+        "Пользователь с указанным api-key отсутствует в базе"
+    ) if user is None else
+                UserOut.parse_obj(
+                    {
+                        "result": True,
+                        "user": user.to_json(),
+                    }
+                ))
+    # return response
 
 
 @router.get(
     "/api/users/{user_id}",
-    response_model=UserOut,
+    response_model=Union[UserOut, Failure],
     summary="Показывает данные пользователя по id",
     description="Маршрут получения информации о пользователе по ID.",
     response_description="Успешный ответ",
@@ -62,37 +61,35 @@ async def get_user_profile(
 async def get_user(
         user_id: int,
         service: UserService = Depends(),
-        # user: current_user = Depends(),
-) -> UserOut | Failure:
+) -> Union[UserOut, Failure]:
     """
     Маршрут получения информации о пользователе по ID.
 
     :param user_id: ID пользователя для получения информация.
     :param service:
-    :return: Объект согласно схеме UserOut
+    :return: Объект согласно схеме Union[Success, Failure]
     """
     logger.info(
         f"Получение информации о пользователе с идентификатором {user_id}.",
     )
-    user = await service.get_user_info(user_id)
-    if user.id is None:
-        logger.error("Пользователь с указанным id отсутствует в базе")
-        raise AppException(
-            "id not found",
-            "Пользователь с указанным id отсутствует в базе",
-        )
-
-    response = {"result": True,
-                "user": user.to_json(),
-                }
-    return UserOut.parse_obj(response)
-
+    user_by_id = await service.get_user_info(user_id)
+    return (AppException(
+        "User not found",
+        "Пользователь с указанным id отсутствует в базе"
+    ) if user_by_id.api_token is None else
+                UserOut.parse_obj(
+                    {
+                        "result": True,
+                        "user": user_by_id.to_json(),
+                    }
+                ))
+    # return resp
 
 
 @router.delete(
     "/api/users/{user_id}/follow",
     summary="Подписывает на пользователя",
-    response_model=Success,
+    response_model=Union[Success, Failure],
     description="Маршрут - позволяет подписаться на другого пользователя.",
     response_description="Успешный ответ",
     status_code=status.HTTP_201_CREATED,
@@ -102,7 +99,7 @@ async def add_following(
         user_id: int,
         user: current_user = Depends(),
         service: UserService = Depends(),
-) -> Success | Failure:
+) -> Union[Success, Failure]:
     """
     Маршрут - позволяет подписаться на другого пользователя.
 
@@ -111,29 +108,25 @@ async def add_following(
     :param service:
     :return: Объект согласно схеме Success или Failure
     """
-    if user.id is None:
-        logger.error("Пользователь с указанным id отсутствует в базе")
-        raise AppException(
-            "id not found",
-            "Пользователь с указанным id отсутствует в базе",
-        )
-
     result = await service.follow(user_id, user.id)
-    if not result:
-        logger.error("Ошибка при подписке")
-        raise AppException(
-            "Followers not found",
-            "Ошибка при подписке",
-        )
 
-    return Success.parse_obj({"result": True})
+    return (AppException(
+        "Followers not found",
+        "Ошибка при подписке"
+    ) if not result else
+                Success.parse_obj(
+                    {
+                        "result": True
+                    }
+                ))
 
+    # return response
 
 
 @router.delete(
     "/api/tweets/{user_id}/follow",
     summary="Отписывает от пользователя",
-    response_model=Success,
+    response_model=Union[Success, Failure],
     description="Маршрут - позволяет отписаться от другого пользователя.",
     response_description="Успешный ответ",
     status_code=status.HTTP_201_CREATED,
@@ -151,7 +144,7 @@ async def delete_following(
         user_id: int,
         user: current_user = Depends(),
         service: UserService = Depends(),
-) -> Success | Failure:
+) -> Union[Success, Failure]:
     """
     Маршрут - позволяет отписаться от другого пользователя.
 
@@ -160,19 +153,16 @@ async def delete_following(
     :param service: Сервис для обработки маршрута
     :return: Объект согласно схеме Success или Failure
     """
-    if user.id is None:
-        logger.error("Пользователь с указанным id отсутствует в базе")
-        raise AppException(
-            "id not found",
-            "Пользователь с указанным id отсутствует в базе",
-        )
     result = await service.unfollow(user_id, user.id)
-    if not result:
-        logger.error("Пользователь не подписан")
-        raise AppException(
-            "Followers not found",
-            "Пользователь не подписан",
-        )
 
 
-    return Success.parse_obj({"result": True})
+    return (AppException(
+        "Followers not found",
+        "Пользователь не подписан"
+    ) if not result else Success.parse_obj(
+        {
+            "result": True
+        }
+    ))
+
+    # return response

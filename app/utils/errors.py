@@ -10,12 +10,15 @@ FunVar = TypeVar("FunVar", bound=Callable[..., Any])
 logger = get_logger("error")
 
 
-class AppException(Exception):
+def AppException(mtype: str, msg: str):
+    raise AppExcept(mtype, msg)
+
+class AppExcept(Exception):
     """
     Пользовательский класс исключений.
     """
-    def __init__(self, msg: str, mtype: str):
-        super(AppException, self).__init__()
+    def __init__(self, mtype: str, msg: str):
+        super(AppExcept, self).__init__()
         self.mtype = mtype
         self.msg = msg
 
@@ -55,7 +58,7 @@ def error_handler(func: FunVar) -> FunVar:
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
         try:
             return await func(*args, **kwargs)
-        except AppException as ex:
+        except AppExcept as ex:
             logger.error(ex.msg)
             return await create_valid_response(ex.mtype, ex.msg)
         except ValueError as ex:

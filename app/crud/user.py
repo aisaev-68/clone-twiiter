@@ -32,7 +32,7 @@ class UserService:
 
         return users.scalars().all()
 
-    async def get_user_info(self, user_id: int, ):
+    async def get_user_info(self, user_id: int, ) -> Union[User, None]:
         """
         Метод для получения информации о пользователе.
 
@@ -50,7 +50,7 @@ class UserService:
 
         return user
 
-    async def get_user_by_id(self, user_id: int):
+    async def get_user_by_id(self, user_id: int) -> Union[User, None]:
         """
         Метод - получает информацию о пользователе по его ID.
 
@@ -66,7 +66,7 @@ class UserService:
 
         return user
 
-    async def get_user_by_token(self, api_key: str, ):
+    async def get_user_by_token(self, api_key: str, ) -> Union[User, None]:
         """
         Метод получает информацию о пользователе по его ID.
 
@@ -80,7 +80,7 @@ class UserService:
             selectinload(User.follows))
 
         result = await self.session.execute(query, )
-        user: User = result.scalars().first()
+        user: Union[User, None] = result.scalars().first()
 
         return user
 

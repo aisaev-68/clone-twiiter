@@ -1,3 +1,5 @@
+from typing import Union
+
 from crud.tweet import TweetService
 from db.schemas import Failure, Success
 from fastapi import APIRouter, Depends, status
@@ -15,7 +17,7 @@ router = APIRouter(
 @router.delete(
     "/{tweet_id}/likes",
     summary="Удаляет лайк твита с заданным ID",
-    response_model=Success,
+    response_model=Union[Success, Failure],
     description="Маршрут для удаления лайка твита с заданным ID.",
     response_description="Успешный ответ",
     status_code=status.HTTP_200_OK,
@@ -25,7 +27,7 @@ async def delete_like(
         tweet_id: int,
         user: current_user = Depends(),
         service: TweetService = Depends(),
-) -> Success | Failure:
+) -> Union[Success, Failure]:
     """
     Endpoint для удаления лайка твиту с заданным ID.
 
@@ -35,24 +37,24 @@ async def delete_like(
     :return: Возвращает объект согласно схеме Success или Failure
     """
     logger.info("Удаление лайка пользователя.")
-    if user is None:
-        logger.error("Пользователь с указанным id отсутствует в базе")
-        raise AppException(
-            "id not found",
-            "Пользователь с указанным id отсутствует в базе",
-        )
-
-    await service.delete_like(
+    AppException(
+        "id not found",
+        "Пользователь с указанным id отсутствует в базе",
+    ) if user is None else await service.delete_like(
         tweet_id,
         user.id,
     )
-    return Success.parse_obj({"result": True})
+    return Success.parse_obj(
+        {
+            "result": True
+        }
+    )
 
 
 @router.post(
     "/{tweet_id}/likes",
     summary="Добавляет лайк твиту с заданным ID",
-    response_model=Success,
+    response_model=Union[Success, Failure],
     description="Маршрут для добавления лайка твиту с заданным ID.",
     response_description="Успешный ответ",
     status_code=status.HTTP_201_CREATED,
@@ -62,7 +64,7 @@ async def like_tweet(
         tweet_id: int,
         user: current_user = Depends(),
         service: TweetService = Depends(),
-) -> Success | Failure:
+) -> Union[Success, Failure]:
     """
     Endpoint для добавления лайка твиту с заданным ID.
 
@@ -72,16 +74,16 @@ async def like_tweet(
     :return: Возвращает объект согласно схеме Success или Failure
     """
     logger.info("Добавление лайка пользователя.")
-    if user is None:
-        logger.error("Пользователь с указанным id отсутствует в базе")
-        raise AppException(
-            "id not found",
-            "Пользователь с указанным id отсутствует в базе",
-        )
-
-    await service.add_like(
+    AppException(
+        "id not found",
+        "Пользователь с указанным id отсутствует в базе",
+    ) if user is None else await service.add_like(
         tweet_id,
         user.id,
     )
 
-    return Success.parse_obj({"result": True})
+    return Success.parse_obj(
+        {
+            "result": True
+        }
+    )

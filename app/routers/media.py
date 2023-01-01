@@ -1,3 +1,5 @@
+from typing import Union
+
 from crud.media import MediaService
 from db.schemas import Failure, FileSuccess
 from fastapi import APIRouter, Depends, File, UploadFile, status
@@ -15,7 +17,7 @@ router = APIRouter(
 
 @router.post(
     "",
-    response_model=FileSuccess,
+    response_model=Union[FileSuccess, Failure],
     summary="Загружает файл из твита",
     description="Маршрут - позволяет загрузить файл из твита.",
     response_description="Успешный ответ",
@@ -26,7 +28,7 @@ async def get_new_file(
         user: current_user = Depends(),
         service: MediaService = Depends(),
         file: UploadFile = File(),
-) -> FileSuccess | Failure:
+) -> Union[FileSuccess, Failure]:
     """
     Endpoint получения файла из твита пользователя.
 
@@ -42,9 +44,9 @@ async def get_new_file(
             "Пользовател с таким api-key отстутствует в базе",
         )
 
-    file_id = await service.write_file(file)
-
-    return FileSuccess.parse_obj({
-        "result": True,
-        "media_id": file_id,
-    })
+    return FileSuccess.parse_obj(
+        {
+            "result": True,
+            "media_id": (await service.write_file(file)),
+        }
+    )

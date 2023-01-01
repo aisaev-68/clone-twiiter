@@ -81,8 +81,7 @@ class Tweet(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     user_id = Column(Integer, ForeignKey("user.id"))
 
-    user: Optional["User"] = relationship("User", back_populates="tweets",
-                                          foreign_keys=[user_id])
+    user: Optional["User"] = relationship("User", back_populates="tweets")
     likes: List["TweetLikes"] = relationship("TweetLikes", back_populates="tweet")
 
     tweet_image: List["Media"] = relationship("Media", back_populates="medias")
