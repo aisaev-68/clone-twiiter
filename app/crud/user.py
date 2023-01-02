@@ -5,10 +5,10 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from db.database import get_db
-from db.models import Follows, User
-from db.schemas import Success, UserOut
-from utils.logger import get_logger
+from app.db.database import get_db
+from app.db.models import Follows, User
+from app.db.schemas import Success, UserOut
+from app.utils.logger import get_logger
 
 logger = get_logger("crud.user")
 

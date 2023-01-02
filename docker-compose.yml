@@ -1,17 +1,22 @@
 version: '3.8'
 services:
   fastapi:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - postgres
     restart: always
+    command: bash -c "
+      alembic upgrade head && uvicorn app.main:app
+      --host 0.0.0.0 --port 8080
+      --lifespan=on --use-colors --loop uvloop --http httptools
+      --reload --log-level debug
+      "
     volumes:
-      - ".:/app/"
-#    ports:
-#        - "8080:8080"
+      - ./app:/home/code/app
     networks:
-      - db_network
-      - web_network
+      - net
 
 
   nginx:
@@ -25,7 +30,7 @@ services:
       - "./app/static:/www/data/static"
       - "./app/images:/www/data/images"
     networks:
-      - web_network
+      - net
     depends_on:
       - fastapi
 
@@ -40,32 +45,23 @@ services:
       POSTGRES_DB: ${DB_NAME}
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - "./app/db-data:/var/lib/postgresql/data"
+      - "db_data:/var/lib/postgresql/data:rw"
     networks:
-      - db_network
+      - net
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test:
+        [
+          "CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}"
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
 
-#  pgadmin:
-#    container_name: pgadmin4
-#    image: dpage/pgadmin4
-#    restart: always
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-#    ports:
-#      - "15050:80"
-#    volumes:
-#      - pgadmin_data:/data/pgadmin
-
-
 networks:
-  db_network:
+  net:
     driver: bridge
-  web_network:
-    driver: bridge
+
+volumes:
+  db_data: {}

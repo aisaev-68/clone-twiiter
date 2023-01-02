@@ -3,10 +3,10 @@ from fastapi import Depends
 from fastapi.security.api_key import APIKeyHeader
 from jose.jwt import encode
 
-from crud.user import UserService
-from db.models import User
-from settings import settings
-from utils.logger import get_logger
+from app.crud.user import UserService
+from app.db.models import User
+from app.settings import settings
+from app.utils.logger import get_logger
 
 logger = get_logger("user_current")
 api_key_header = APIKeyHeader(name="api-key", auto_error=False)

@@ -1,11 +1,11 @@
 from typing import Union
 from fastapi import APIRouter, Depends, File, UploadFile, status
 
-from crud.media import MediaService
-from db.schemas import Failure, FileSuccess
-from routers.user_current import current_user
-from utils.errors import AppException, error_handler
-from utils.logger import get_logger
+from app.crud.media import MediaService
+from app.db.schemas import Failure, FileSuccess
+from app.routers.user_current import current_user
+from app.utils.errors import AppException, error_handler
+from app.utils.logger import get_logger
 
 logger = get_logger("routers.media")
 

@@ -4,18 +4,18 @@ from fastapi import (
     Depends,
     status,
 )
-from crud.user import UserService
-from db.schemas import (
+from app.crud.user import UserService
+from app.db.schemas import (
     Failure,
     Success,
     UserOut,
 )
-from routers.user_current import current_user
-from utils.errors import (
+from app.routers.user_current import current_user
+from app.utils.errors import (
     AppException,
     error_handler,
 )
-from utils.logger import get_logger
+from app.utils.logger import get_logger
 
 logger = get_logger("routers.user")
 

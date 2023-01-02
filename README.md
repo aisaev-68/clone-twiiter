@@ -1,15 +1,56 @@
-### To setup project
+## Twitter Clone
 
-1. Install docker with docker compose
-2. Setup .env file. Default values are:
-```DATABASE_NAME=dbname
-DATABASE_USERNAME=dbuser
-DATABASE_PASSWORD=dbpass
-DATABASE_HOSTNAME=localhost
-DATABASE_PORT=5432
-TWEET_MAX_LENGTH=500
+### Функциональные возможности:
+1. Пользователь может добавить новый твит.
+2. Пользователь может удалить свой твит.
+3. Пользователь может зафоловить другого пользователя.
+4. Пользователь может отписаться от другого пользователя.
+5. Пользователь может отмечать твит как понравившийся.
+6. Пользователь может убрать отметку «Нравится».
+7. Пользователь может получить ленту из твитов отсортированных в
+порядке убывания по популярности от пользователей, которых он
+фоловит.
+8. Твит может содержать картинку
+
+### Переменные среды
+Переименовать файл .env.example в .env и установите свои данные
+
+### Команды для сборки и запуска
+
+1. Соберите образ и запустите сервис: 
 ```
-3. run `docker-compose up`
+docker-compose up -d --build
+```
+2. Инициализируйте данные: 
+```
+docker-compose exec webapp python db/init_db.py 
+docker-compose restart
+```
+3. Просмотр статуса службы:
+```
+docker-compose ps -a
+```
+
+### Другие команды работы с docker
+
+1. Перезапустить службу:
+```
+ docker-compose restart
+```
+2. Запустить службу:
+```
+docker-compose start <имя службы>
+```
+3. Остановить службу:
+```
+docker-compose stop <имя службы>
+```
+4. Закрыть службу и удалить контейнер:
+```
+docker container stop $(docker container ls -aq) &&  
+docker container rm $(docker container ls -aq) &&  
+docker system prune --all --volumes
+```
 
 docker-compose exec fastapi alembic init -t async migrations
 docker-compose exec fastapi alembic revision --autogenerate -m "init"

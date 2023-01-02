@@ -5,10 +5,10 @@ import aiofiles
 from fastapi import Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.database import get_db
-from db.models import Media
-from settings import settings, uploaded_file_path
-from utils.logger import get_logger
+from app.db.database import get_db
+from app.db.models import Media
+from app.settings import settings, uploaded_file_path
+from app.utils.logger import get_logger
 
 logger = get_logger("crud.media")
 

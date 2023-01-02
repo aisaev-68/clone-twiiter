@@ -6,10 +6,10 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from db.database import get_db
-from db.models import Media, Tweet, TweetLikes
-from db.schemas import NewTweetOut, Success, TweetIn, TweetsOut
-from utils.logger import get_logger
+from app.db.database import get_db
+from app.db.models import Media, Tweet, TweetLikes
+from app.db.schemas import NewTweetOut, Success, TweetIn, TweetsOut
+from app.utils.logger import get_logger
 
 logger = get_logger("crud.post")
 

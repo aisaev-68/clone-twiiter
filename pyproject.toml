@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Clone-tweeter"
 authors = ["ramazan_aisaev <aisaev-68@yandex.ru>"]
 readme = "README.md"
-packages = [{include = "python_advanced_diploma"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -24,6 +23,7 @@ python-dotenv = "^0.21.0"
 python-multipart = "^0.0.5"
 alembic = "^1.9.1"
 pytest-cov = "^4.0.0"
+uvloop = "^0.17.0"
 
 
 [build-system]
