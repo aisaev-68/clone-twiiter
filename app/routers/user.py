@@ -5,12 +5,12 @@ from fastapi import (
     status,
 )
 from app.crud.user import UserService
-from app.db.schemas import (
+from app.schema.schemas import (
     Failure,
     Success,
     UserOut,
 )
-from app.routers.user_current import current_user
+from app.core.user_current import current_user
 from app.utils.errors import (
     AppException,
     error_handler,

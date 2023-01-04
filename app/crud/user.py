@@ -7,7 +7,7 @@ from sqlalchemy.orm import selectinload
 
 from app.db.database import get_db
 from app.db.models import Follows, User
-from app.db.schemas import Success, UserOut
+from app.schema.schemas import Success, UserOut
 from app.utils.logger import get_logger
 
 logger = get_logger("crud.user")
@@ -85,7 +85,7 @@ class UserService:
             self,
             user_to_follow: int,
             current_user_id: int
-    ) -> Success:
+    ) -> bool:
         """
         Метод для добавления пользователя в подписки.
 
@@ -120,7 +120,7 @@ class UserService:
             self,
             user_un_follow: int,
             current_user_id: int
-    ) -> Success:
+    ) -> bool:
         """
         Метод для удаления пользователя из подписки.
 

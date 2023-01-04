@@ -10,8 +10,8 @@ services:
     command: bash -c "
       alembic upgrade head && uvicorn app.main:app
       --host 0.0.0.0 --port 8080
-      --lifespan=on --use-colors --loop uvloop --http httptools
-      --reload --log-level debug
+      --reload 
+      --workers 1
       "
     volumes:
       - ./app:/home/code/app

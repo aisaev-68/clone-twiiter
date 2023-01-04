@@ -8,7 +8,7 @@ from sqlalchemy.orm import selectinload
 
 from app.db.database import get_db
 from app.db.models import Media, Tweet, TweetLikes
-from app.db.schemas import NewTweetOut, Success, TweetIn, TweetsOut
+from app.schema.schemas import NewTweetOut, Success, TweetIn, TweetsOut
 from app.utils.logger import get_logger
 
 logger = get_logger("crud.post")

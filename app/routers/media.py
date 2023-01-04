@@ -2,8 +2,8 @@ from typing import Union
 from fastapi import APIRouter, Depends, File, UploadFile, status
 
 from app.crud.media import MediaService
-from app.db.schemas import Failure, FileSuccess
-from app.routers.user_current import current_user
+from app.schema.schemas import Failure, FileSuccess
+from app.core.user_current import current_user
 from app.utils.errors import AppException, error_handler
 from app.utils.logger import get_logger
 

@@ -17,7 +17,7 @@
 
 ### Команды для сборки и запуска
 
-1. Соберите образ и запустите сервис: 
+1. Соберрать образ и запустить сервис: 
 ```
 docker-compose up -d --build
 ```
@@ -50,9 +50,11 @@ docker-compose stop <имя службы>
 docker container stop $(docker container ls -aq) &&  
 docker container rm $(docker container ls -aq) &&  
 docker system prune --all --volumes
-```
 
-docker-compose exec fastapi alembic init -t async migrations
-docker-compose exec fastapi alembic revision --autogenerate -m "init"
-docker-compose exec fastapi alembic revision --autogenerate -m "init_db"
+```
+docker-compose --file docker-compose-dev.yml up
+
 docker-compose exec fastapi alembic upgrade head
+
+docker-compose exec fastapi python initial_data.py
+docker-compose exec fastapi pytest .

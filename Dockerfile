@@ -19,8 +19,8 @@ COPY migrations migrations
 COPY .env alembic.ini ./
 
 # create a non-root user and switch to it, for security.
-RUN addgroup --system --gid 1001 "app-user"
-RUN adduser --system --uid 1001 "app-user"
-USER "app-user"
+#RUN addgroup --system --gid 1001 "app-user"
+#RUN adduser --system --uid 1001 "app-user"
+#USER "app-user"
 #EXPOSE 8000
 ENTRYPOINT ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]

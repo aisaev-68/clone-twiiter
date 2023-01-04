@@ -2,7 +2,7 @@ from typing import Union
 from fastapi import APIRouter, Depends, status
 
 from app.crud.tweet import TweetService
-from app.db.schemas import (
+from app.schema.schemas import (
     Failure,
     NewTweetOut,
     Success,
@@ -10,7 +10,7 @@ from app.db.schemas import (
     TweetsOut,
     UserOut,
 )
-from app.routers.user_current import current_user
+from app.core.user_current import current_user
 from app.utils.errors import AppException, error_handler
 from app.utils.logger import get_logger
 
