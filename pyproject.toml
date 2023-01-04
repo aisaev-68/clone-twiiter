@@ -12,18 +12,18 @@ aiofiles = "^22.1.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = "^1.7.4"
 fastapi = "^0.88.0"
-httpx = "^0.23.1"
 pydantic = "^1.10.2"
-sqlalchemy = "1.4.35"
-sqlmodel = "^0.0.8"
-wemake-python-styleguide = "^0.17.0"
-pytest-asyncio = "^0.20.3"
 uvicorn = "^0.20.0"
 python-dotenv = "^0.21.0"
 python-multipart = "^0.0.5"
 alembic = "^1.9.1"
-pytest-cov = "^4.0.0"
+sqlalchemy = "^1.4.46"
 
+[tool.poetry.group.dev.dependencies]
+httpx = "^0.23.2"
+wemake-python-styleguide = "^0.17.0"
+pytest-asyncio = "^0.20.3"
+pytest-cov = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]

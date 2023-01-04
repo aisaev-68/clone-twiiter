@@ -78,9 +78,9 @@ services:
 #      - net
 
 volumes:
-  db_data: {}
+  db_data:
 
 
 networks:
-  net: {}
+  net:
 
