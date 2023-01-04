@@ -705,6 +705,17 @@ files = [
 flake8 = "*"
 
 [[package]]
+name = "functools"
+version = "0.5"
+description = "Fast tools for functional programming"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "functools-0.5.tar.gz", hash = "sha256:596ed8999dee419c0749a41bfdd82e4697e80ea27ee01c716003ef55be9a54c5"},
+]
+
+[[package]]
 name = "gitdb"
 version = "4.0.10"
 description = "Git Object Database"
@@ -1644,4 +1655,4 @@ typing_extensions = ">=4.0,<5.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "8ec24ece5d0d8f354a34f5099116555738eae501abe2e5bda97e040b4923d148"
+content-hash = "3bb643e7dd84dd927146bf1f8d8cdd4e45d46564453ab1da0ac5c240ac317953"

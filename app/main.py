@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.schema.schemas import Failure
-from app.routers import user, tweet, like, media
+from app.api.v1.api import api_router as api_router_v1
 from app.utils.logger import get_logger
 
 logger = get_logger("main")
@@ -20,10 +20,7 @@ app = FastAPI(
     },
 )
 
-app.include_router(user.router)
-app.include_router(tweet.router)
-app.include_router(media.router)
-app.include_router(like.router)
+
 
 origins = [
     "http://localhost:8080",
@@ -40,3 +37,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(api_router_v1)

@@ -5,15 +5,13 @@ import aiofiles
 from fastapi import Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import settings
 from app.db.database import get_db
 from app.db.models import Media
 from app.utils.logger import get_logger
 
 logger = get_logger("crud.media")
 
-uploaded_file_path = Path(__file__).parent / "images"
-uploaded_file_path.mkdir(exist_ok=True, parents=True)
-uploaded_file_path = uploaded_file_path.absolute()
 
 class MediaService:
     """Класс для обработки Endpoint связанных с media файлами."""
@@ -31,7 +29,8 @@ class MediaService:
         :param file: Полученный файл
         :return: Объект согласно схеме Success или Failure
         """
-        home = uploaded_file_path
+        home = settings.path_image()
+        print(999999, home)
         filename = str(uuid.uuid4())
         file_name_extension = file.filename.split(".")[1]
 

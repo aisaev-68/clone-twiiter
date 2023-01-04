@@ -1,11 +1,12 @@
 import os
 from typing import Union
-
+from typing import AsyncGenerator
 from dotenv import load_dotenv
 from fastapi import Depends
 from fastapi.security.api_key import APIKeyHeader
 from jose.jwt import encode
 
+from app.config import settings
 from app.crud.user import UserService
 from app.db.models import User
 from app.utils.logger import get_logger
@@ -13,10 +14,13 @@ from app.utils.logger import get_logger
 logger = get_logger("user_current")
 api_key_header = APIKeyHeader(name="api-key", auto_error=False)
 
-load_dotenv()
+# load_dotenv()
+#
+# secret_key = os.getenv("SECRET_KEY")
+# algorithm = os.getenv("ALGORITHM")
+secret_key = settings.secret_key
+algorithm = settings.algorithm
 
-secret_key = os.getenv("SECRET_KEY")
-algorithm = os.getenv("ALGORITHM")
 
 
 async def current_user(

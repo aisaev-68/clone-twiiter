@@ -3,16 +3,13 @@ from fastapi import APIRouter, Depends, File, UploadFile, status
 
 from app.crud.media import MediaService
 from app.schema.schemas import Failure, FileSuccess
-from app.core.user_current import current_user
+from app.api import depends
 from app.utils.errors import AppException, error_handler
 from app.utils.logger import get_logger
 
-logger = get_logger("routers.media")
+logger = get_logger("endpoints.media")
 
-router = APIRouter(
-    prefix="/api/medias",
-    tags=["Tweets"],
-)
+router = APIRouter()
 
 
 @router.post(
@@ -25,7 +22,7 @@ router = APIRouter(
 )
 @error_handler
 async def get_new_file(
-        user: current_user = Depends(),
+        user: depends.current_user = Depends(),
         service: MediaService = Depends(),
         file: UploadFile = File(),
 ) -> Union[FileSuccess, Failure]:

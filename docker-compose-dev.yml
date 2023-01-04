@@ -17,8 +17,8 @@ services:
 #      --reload --log-level debug
 #      "
     volumes:
-      - ./app:/home/code/app
-      - ./tests:/home/code/app/tests
+      - ./app:/code/app
+      - ./tests:/code/app/tests
     networks:
       - net
 

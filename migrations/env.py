@@ -9,7 +9,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from alembic import context
-
+from app.config import settings
 # add current path to PYTHONPATH, otherwise app module will not be found when alembic executing
 sys.path.append(os.getcwd())
 
@@ -18,11 +18,7 @@ from app.db import database, models
 # access to the values within the .ini file in use.
 config = context.config
 
-section = config.config_ini_section
-config.set_section_option(section, "DB_USER", database.DB_USER)
-config.set_section_option(section, "DB_PASSWORD", database.DB_PASSWORD)
-config.set_section_option(section, "DB_NAME", database.DB_NAME)
-config.set_section_option(section, "DB_HOST", database.DB_HOST)
+
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -41,7 +37,7 @@ target_metadata = models.Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-
+config.set_main_option("sqlalchemy.url", settings.async_db_uri)
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 

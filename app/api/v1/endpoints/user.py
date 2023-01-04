@@ -10,18 +10,16 @@ from app.schema.schemas import (
     Success,
     UserOut,
 )
-from app.core.user_current import current_user
+from app.api import depends
 from app.utils.errors import (
     AppException,
     error_handler,
 )
 from app.utils.logger import get_logger
 
-logger = get_logger("routers.user")
+logger = get_logger("endpoints.user")
 
-router = APIRouter(
-    tags=["Users"],
-)
+router = APIRouter()
 
 
 @router.get(
@@ -34,7 +32,7 @@ router = APIRouter(
 )
 @error_handler
 async def get_user_profile(
-        user: current_user = Depends(),
+        user: depends.current_user = Depends(),
 ) -> Union[UserOut, Failure]:
     """
     Маршрут получения информации о текущем пользователе.
@@ -108,7 +106,7 @@ async def get_user(
 @error_handler
 async def add_following(
         user_id: int,
-        user: current_user = Depends(),
+        user: depends.current_user = Depends(),
         service: UserService = Depends(),
 ) -> Union[Success, Failure]:
     """
@@ -144,7 +142,7 @@ async def add_following(
 @error_handler
 async def delete_following(
         user_id: int,
-        user: current_user = Depends(),
+        user: depends.current_user = Depends(),
         service: UserService = Depends(),
 ) -> Union[Success, Failure]:
     """
