@@ -110,8 +110,9 @@ class TweetService:
         if media is not None:
             for tweet_file in media:
                 await self.session.execute(delete(Media).where(Media.tweet_id == tweet_file.tweet_id))
-                file_path = Path(tweet_file.path_file)
-                print(1111111111111, settings.path_image())
+                # file_path = Path(tweet_file.path_file)
+                file_path = settings.path_image() / tweet_file.path_file.split("/")[1]
+                print(1111111111111, file_path)
                 file_path.unlink()
         await self.session.execute(
             delete(TweetLikes).where(TweetLikes.tweet_id == tweet_id))
