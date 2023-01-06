@@ -1,6 +1,7 @@
 FROM python:3.9
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y mc && apt-get autoremove -y
+RUN pip install --upgrade pip
 
 WORKDIR /code
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,7 +17,7 @@ RUN poetry config virtualenvs.create false \
 
 
 COPY app app
-COPY tests app/tests
+COPY tests tests
 COPY migrations migrations
 COPY .env alembic.ini initial_data.py setup.cfg ./
 

@@ -1,3 +1,4 @@
+import os
 import uuid
 from pathlib import Path
 
@@ -32,7 +33,8 @@ class MediaService:
         home = settings.path_image()
         print(999999, home)
         filename = str(uuid.uuid4())
-        file_name_extension = file.filename.split(".")[1]
+        file_name_extension = os.path.splitext(file.filename)
+        # file.filename.split(".")[1]
 
         file_name = "{name}.{ext}".format(name=filename, ext=file_name_extension)
         file_path = "images/{image_name}".format(image_name=file_name)

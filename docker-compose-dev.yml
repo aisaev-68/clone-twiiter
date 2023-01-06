@@ -18,7 +18,7 @@ services:
 #      "
     volumes:
       - ./app:/code/app
-      - ./tests:/code/app/tests
+      - ./tests:/code/tests
     networks:
       - net
 
@@ -49,7 +49,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ./db_data:/var/lib/postgresql/data
     networks:
       - net
     ports:

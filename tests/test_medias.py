@@ -5,7 +5,7 @@ import aiofiles
 @pytest.mark.asyncio
 async def test_add_media(client: AsyncClient):
 
-    async with aiofiles.open("images/1.png", mode="rb") as img_file:
+    async with aiofiles.open("app/images/1.jpg", mode="rb") as img_file:
         data = await img_file.read()
 
     response = await client.post("/api/medias", files={"file": data}, headers={"api-key": "test"})

@@ -7,9 +7,7 @@ from app.main import app
 
 @pytest.fixture(scope="session")
 def event_loop():
-    #get_running_loop( )
     loop = asyncio.new_event_loop()
-    # loop = asyncio.get_running_loop()
     yield loop
     loop.close()
 

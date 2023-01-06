@@ -9,11 +9,10 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from alembic import context
-from app.config import settings
-# add current path to PYTHONPATH, otherwise app module will not be found when alembic executing
-sys.path.append(os.getcwd())
 
-from app.db import database, models
+
+from app.db import models
+from app.config import settings
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

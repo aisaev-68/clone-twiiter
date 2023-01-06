@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
 from sqlalchemy.orm import sessionmaker
 from app.config import settings
-from app.db.models import User
+from app.db.models import User, Base
 from app.utils.logger import get_logger
 
 logger = get_logger("initial_data")
@@ -23,6 +23,9 @@ async def init_data():
         settings.async_db_uri,
         echo=True,
     )
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
 
     async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 

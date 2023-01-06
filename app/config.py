@@ -1,13 +1,10 @@
 import os
-import sys
-# from pathlib import Path
 
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional, Union, Dict, Any
 
 from pydantic import BaseSettings, PostgresDsn, validator
-
 
 
 class Settings(BaseSettings):
@@ -30,7 +27,7 @@ class Settings(BaseSettings):
             password=values.get("db_password"),
             host=values.get("db_host"),
             port=str(values.get("db_port")),
-            path=f"/{values.get('db_name') or ''}",
+            path=f"/{values.get('db_name')}",
         )
 
     @staticmethod

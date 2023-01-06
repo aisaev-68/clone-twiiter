@@ -53,7 +53,7 @@ docker system prune --all --volumes
 
 ```
 docker-compose --file docker-compose-dev.yml up
-
+docker-compose --file docker-compose-dev.yml up
 docker-compose exec fastapi alembic upgrade head
 
 docker-compose exec fastapi python initial_data.py
