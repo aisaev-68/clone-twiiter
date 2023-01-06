@@ -17,14 +17,24 @@
 
 ### Команды для сборки и запуска
 
-1. Соберрать образ и запустить сервис: 
+1. Собрать образы и запустить сервисы: 
 ```
-docker-compose up -d --build
+docker-compose --file docker-compose-dev.yml up # режим dev
+docker-compose up -d --build # режим prod
 ```
-2. Инициализируйте данные: 
+2. Инициализируйте базу и данные: 
 ```
-docker-compose exec webapp python db/init_db.py 
+docker-compose exec fastapi alembic upgrade head
+docker-compose exec fastapi python initial_data.py
 docker-compose restart
+```
+3. Тестирование: 
+```
+docker-compose exec fastapi isort .
+docker-compose exec fastapi mypy .
+docker-compose exec fastapi flake8 .
+docker-compose exec fastapi pytest .
+docker-compose exec fastapi pytest --cov=app/api/v1/endpoints # покрытие кода
 ```
 3. Просмотр статуса службы:
 ```
@@ -45,16 +55,11 @@ docker-compose start <имя службы>
 ```
 docker-compose stop <имя службы>
 ```
-4. Закрыть службу и удалить контейнер:
+4. Закрыть службы и удалить контейнеры:
 ```
 docker container stop $(docker container ls -aq) &&  
 docker container rm $(docker container ls -aq) &&  
 docker system prune --all --volumes
 
 ```
-docker-compose --file docker-compose-dev.yml up
-docker-compose --file docker-compose-dev.yml up
-docker-compose exec fastapi alembic upgrade head
 
-docker-compose exec fastapi python initial_data.py
-docker-compose exec fastapi pytest .

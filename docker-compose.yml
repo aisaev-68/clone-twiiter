@@ -45,7 +45,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - "db_data:/var/lib/postgresql/data:rw"
+      - ./app/db_data:/var/lib/postgresql/data
     networks:
       - net
     ports:
@@ -64,4 +64,4 @@ networks:
     driver: bridge
 
 volumes:
-  db_data: {}
+  db_data:

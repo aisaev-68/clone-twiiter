@@ -16,11 +16,11 @@ RUN poetry config virtualenvs.create false \
 
 COPY app app
 COPY migrations migrations
-COPY .env alembic.ini ./
+COPY .env alembic.ini initial_data.py ./
+ENV PYTHONPATH=/code
 
 # create a non-root user and switch to it, for security.
 #RUN addgroup --system --gid 1001 "app-user"
 #RUN adduser --system --uid 1001 "app-user"
 #USER "app-user"
-#EXPOSE 8000
-ENTRYPOINT ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
+#ENTRYPOINT ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
