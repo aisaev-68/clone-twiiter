@@ -1,11 +1,11 @@
 import asyncio
+
 from jose import jwt
-
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-
 from sqlalchemy.orm import sessionmaker
+
 from app.config import settings
-from app.db.models import User, Base
+from app.db.models import Base, User
 from app.utils.logger import get_logger
 
 logger = get_logger("initial_data")

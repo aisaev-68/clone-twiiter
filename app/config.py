@@ -1,8 +1,7 @@
 import os
-
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional, Union, Dict, Any
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseSettings, PostgresDsn, validator
 

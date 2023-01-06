@@ -1,6 +1,6 @@
 import os
-from typing import Union
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Union
+
 from dotenv import load_dotenv
 from fastapi import Depends
 from fastapi.security.api_key import APIKeyHeader

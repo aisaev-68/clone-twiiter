@@ -1,6 +1,8 @@
 from typing import Union
+
 from fastapi import APIRouter, Depends, status
 
+from app.api import depends
 from app.crud.tweet import TweetService
 from app.schema.schemas import (
     Failure,
@@ -10,7 +12,6 @@ from app.schema.schemas import (
     TweetsOut,
     UserOut,
 )
-from app.api import depends
 from app.utils.errors import AppException, error_handler
 from app.utils.logger import get_logger
 

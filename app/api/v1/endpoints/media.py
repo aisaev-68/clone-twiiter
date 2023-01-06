@@ -1,9 +1,10 @@
 from typing import Union
+
 from fastapi import APIRouter, Depends, File, UploadFile, status
 
+from app.api import depends
 from app.crud.media import MediaService
 from app.schema.schemas import Failure, FileSuccess
-from app.api import depends
 from app.utils.errors import AppException, error_handler
 from app.utils.logger import get_logger
 

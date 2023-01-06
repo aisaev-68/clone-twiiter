@@ -1,20 +1,11 @@
 from typing import Union
-from fastapi import (
-    APIRouter,
-    Depends,
-    status,
-)
-from app.crud.user import UserService
-from app.schema.schemas import (
-    Failure,
-    Success,
-    UserOut,
-)
+
+from fastapi import APIRouter, Depends, status
+
 from app.api import depends
-from app.utils.errors import (
-    AppException,
-    error_handler,
-)
+from app.crud.user import UserService
+from app.schema.schemas import Failure, Success, UserOut
+from app.utils.errors import AppException, error_handler
 from app.utils.logger import get_logger
 
 logger = get_logger("endpoints.user")

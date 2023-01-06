@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.schema.schemas import Failure
 from app.api.v1.api import api_router as api_router_v1
+from app.schema.schemas import Failure
 from app.utils.logger import get_logger
 
 logger = get_logger("main")
