@@ -62,4 +62,12 @@ docker container rm $(docker container ls -aq) &&
 docker system prune --all --volumes
 
 ```
+Работа с сервисом:
+```
+http://0.0.0.0:8080/
+```
+Работа с документацией
+```
+http://0.0.0.0:8080/api/docs
+```
 
