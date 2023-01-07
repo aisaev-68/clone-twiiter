@@ -7,7 +7,6 @@ from sqlalchemy.orm import selectinload
 
 from app.db.database import get_db
 from app.db.models import Follows, User
-from app.schema.schemas import Success, UserOut
 from app.utils.logger import get_logger
 
 logger = get_logger("crud.user")
@@ -18,17 +17,6 @@ class UserService:
 
     def __init__(self, session: AsyncSession = Depends(get_db)):
         self.session = session
-
-    async def get_all_users(self) -> Union[List[Any], Dict[str, Any]]:
-        """
-        Метод возвращает всех пользователей из базы.
-
-        :param session: AsyncSession
-        :return: список объектов Users
-        """
-        users = await self.session.execute(select(User))
-
-        return users.scalars().all()
 
     async def get_user_info(self, user_id: int) -> Union[User, None]:
         """
@@ -99,7 +87,7 @@ class UserService:
         )
         )
 
-        to_follow: Optional[User] = result.scalars().first()
+        to_follow = result.scalars().first()
         following_id = [user.id for user in to_follow.followers]
         user = await self.session.execute(
             select(User).where(User.id == user_to_follow)

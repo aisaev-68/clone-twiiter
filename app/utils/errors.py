@@ -53,7 +53,6 @@ def error_handler(func: FunVar) -> FunVar:
     :param func:
     :return:
     """
-
     @wraps(func)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
         try:

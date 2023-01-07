@@ -1640,6 +1640,18 @@ files = [
 ]
 
 [[package]]
+name = "types-aiofiles"
+version = "22.1.0.4"
+description = "Typing stubs for aiofiles"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-aiofiles-22.1.0.4.tar.gz", hash = "sha256:54465417fdfafc723e6f0fca66de5498866f1cf2595b72c9da35c96d1c3e9fce"},
+    {file = "types_aiofiles-22.1.0.4-py3-none-any.whl", hash = "sha256:3c3d389ceec04c78bd33d13304332dcc46856a418d7d4ebf95e398f1efa3a3b7"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.4.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1706,4 +1718,4 @@ typing_extensions = ">=4.0,<5.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7c46fcb850e4e2fa7cdf5a52f2f27db13b95b8f3d0c0ff982f159d76f6efce1b"
+content-hash = "4f5c6d360d6e27014cbcbd75428d3ebb8068362a070aab9a1369be16056de40b"

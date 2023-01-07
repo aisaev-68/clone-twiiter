@@ -1,7 +1,5 @@
-import os
 from typing import AsyncGenerator
 
-from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -11,16 +9,6 @@ from app.utils.logger import get_logger
 
 logger = get_logger("db.database")
 
-# load_dotenv()
-#
-# DB_USER = os.getenv("DB_USER")
-# DB_PASSWORD = os.getenv("DB_PASSWORD")
-# DB_HOST = os.getenv("DB_HOST")
-# DB_NAME = os.getenv("DB_NAME")
-#
-# asyncpg_url: str = f"postgresql+asyncpg://{DB_USER}:" \
-#                    f"{DB_PASSWORD}@" \
-#                    f"{DB_HOST}:5432/{DB_NAME}"
 
 engine = create_async_engine(settings.async_db_uri, echo=True)
 

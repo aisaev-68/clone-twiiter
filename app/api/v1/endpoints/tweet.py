@@ -36,14 +36,14 @@ async def show_all_tweets(
     """
     Endpoint для отображения всех твитов.
 
-    :param user:
-    :param service:
-    :return: Объект согласно схеме TweetOut или Failure
+    :param user: текущий пользователь
+    :param service: сервис обработки Tweet
+    :return: Объект согласно схеме Union[TweetsOut, Failure]
     """
     logger.info("Получение всех твитов.")
 
     tweets = await service.get_all_tweets()
-
+    print(tweets)
     return AppException(
         "id not found",
         "Пользователь с указанным id отсутствует в базе",
@@ -72,9 +72,9 @@ async def add_tweet(
     Endpoint добавления нового твита пользователя.
 
     :param tweet: Объект полученный согласно схеме TweetIn
-    :param user:
-    :param service:
-    :return: Объект согласно схеме NewTweetOut
+    :param user: текущий пользователь
+    :param service: сервис обработки Tweet
+    :return: Объект согласно схеме Union[NewTweetOut, Failure]
     """
     logger.info("Добавления нового твита пользователя.")
 
@@ -88,7 +88,7 @@ async def add_tweet(
                 tweet,
                 user.id,
             )
-        )["tweet_id"],
+        )["id"],
     })
 
 
@@ -110,8 +110,8 @@ async def delete_tweet(
     Endpoint для удаления твита с заданным ID.
 
     :param tweet_id: ID твита для удаления
-    :param user:
-    :param service:
+    :param user: текущий пользователь
+    :param service: сервис обработки Tweet
     :return: Возвращает объект согласно схеме Success или Failure
     """
     logger.info("Удаление твита пользователя.")
@@ -147,7 +147,7 @@ async def delete_like(
     Endpoint для удаления лайка твиту с заданным ID.
 
     :param tweet_id: ID твита для удаления лайка
-    :param user:
+    :param user: текущий пользователь
     :param service:
     :return: Возвращает объект согласно схеме Success или Failure
     """

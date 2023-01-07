@@ -72,15 +72,15 @@ async def get_user(
             id=user_id,
         ),
     )
-    user_by_id = await service.get_user_info(user_id)
+    user = await service.get_user_info(user_id)
     return (
         AppException(
             "User not found",
             "Пользователь с указанным id отсутствует в базе",
-        ) if user_by_id.api_token is None else UserOut.parse_obj(
+        ) if user is None else UserOut.parse_obj(
             {
                 "result": True,
-                "user": user_by_id.to_json(),
+                "user": user.to_json(),
             },
         )
     )

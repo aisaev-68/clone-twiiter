@@ -30,7 +30,7 @@ class Settings(BaseSettings):
         )
 
     @staticmethod
-    def path_image():
+    def path_image() -> Path:
         uploaded_file_path = Path(__file__).parent / "images"
         uploaded_file_path.mkdir(exist_ok=True, parents=True)
         uploaded_file_path = uploaded_file_path.absolute()
