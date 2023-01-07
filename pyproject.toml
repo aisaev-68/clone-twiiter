@@ -27,6 +27,7 @@ httpx = "^0.23.3"
 pytest-asyncio = "^0.20.3"
 pytest-cov = "^4.0.0"
 mypy = "^0.991"
+sqlalchemy-stubs = "^0.4"
 
 [build-system]
 requires = ["poetry-core"]

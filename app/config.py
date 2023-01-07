@@ -39,7 +39,7 @@ class Settings(BaseSettings):
 
     class Config:
         # case_sensitive = True
-        env_file = os.path.join(os.getcwd(), '.env')
+        env_file = os.path.join(os.getcwd(), ".env")
         env_file_encoding = "utf-8"
 
 

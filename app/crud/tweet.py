@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from fastapi import Depends
 from sqlalchemy import delete, desc, select
@@ -41,6 +41,7 @@ class TweetService:
     ) -> Optional[Tweet]:
         """
         Метод для получения всех твита из базы.
+
         :param user_id: id пользователя
         :param tweet_id: id tweet
         :return: Объект согласно схеме Union[Tweet]
@@ -58,7 +59,7 @@ class TweetService:
             self,
             tweet: TweetIn,
             user_id: int,
-    ) -> Optional[Tweet]:
+    ) -> Dict[str, str]:
         """
         Метод обработки нового твита.
 
@@ -83,7 +84,7 @@ class TweetService:
                 await self.session.flush()
                 await self.session.commit()
 
-        return new_tweet
+        return {"tweet_id": new_tweet.id}
 
     async def delete_tweet(self, tweet_id: int) -> None:
         """

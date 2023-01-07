@@ -88,7 +88,7 @@ async def add_tweet(
                 tweet,
                 user.id,
             )
-        )["id"],
+        )["tweet_id"],
     })
 
 

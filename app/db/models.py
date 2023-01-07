@@ -9,18 +9,18 @@ from app.db.database import Base
 
 class User(Base):
     __tablename__ = "user"
-    id: int = Column(Integer, primary_key=True)
-    username: str = Column(String(25), unique=True, nullable=False)
-    api_token: str = Column(Text(), nullable=False)
-    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+    id = Column(Integer, primary_key=True)
+    username = Column(String(25), unique=True, nullable=False)
+    api_token = Column(Text(), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    tweets: List["Tweet"] = relationship(
+    tweets = relationship(
         "Tweet",
         back_populates="user",
         cascade="all, delete, delete-orphan"
     )
 
-    followers: List["Follows"] = relationship(
+    followers = relationship(
         "User",
         secondary="followings",
         primaryjoin="User.id == Follows.user_id",
@@ -29,7 +29,7 @@ class User(Base):
         lazy="selectin",
         uselist=True,
     )
-    follows: List["Follows"] = relationship(
+    follows = relationship(
         "User",
         secondary="followings",
         primaryjoin="User.id == Follows.follows_user_id",
@@ -40,8 +40,8 @@ class User(Base):
     )
     tweet_likes = relationship("TweetLikes", back_populates="user")
 
-    def __repr__(self):
-        return "{name}, ({id}, username})".format(
+    def __repr__(self) -> str:
+        return "{name}, ({id}, {username})".format(
             name=self.__class__.__name__,
             id=self.id,
             username=self.username
@@ -71,17 +71,17 @@ class User(Base):
 class Tweet(Base):
     __tablename__ = "tweet"
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    content: str = Column(String, index=True)
-    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
-    user_id: int = Column(Integer, ForeignKey("user.id"))
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(String, index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    user_id = Column(Integer, ForeignKey("user.id"))
 
-    user: Optional["User"] = relationship("User", back_populates="tweets")
-    likes: List["TweetLikes"] = relationship("TweetLikes", back_populates="tweet")
+    user = relationship("User", back_populates="tweets")
+    likes = relationship("TweetLikes", back_populates="tweet")
 
-    tweet_image: List["Media"] = relationship("Media", back_populates="medias")
+    tweet_image = relationship("Media", back_populates="medias")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "{name} ({id}, {content}, {date_create})".format(
             name=self.__class__.__name__,
             id=self.id,
@@ -109,34 +109,34 @@ class Follows(Base):
     """
     __tablename__ = "followings"
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    user_id: int = Column(Integer, ForeignKey("user.id"))
-    follows_user_id: int = Column(Integer, ForeignKey("user.id"))
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    follows_user_id = Column(Integer, ForeignKey("user.id"))
 
 
 class TweetLikes(Base):
     __tablename__ = "tweet_likes"
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    user_id: int = Column(Integer, ForeignKey("user.id"))
-    tweet_id: int = Column(Integer, ForeignKey("tweet.id"))
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    tweet_id = Column(Integer, ForeignKey("tweet.id"))
 
     user = relationship("User", back_populates="tweet_likes")
     tweet = relationship("Tweet", back_populates="likes")
 
-    def to_json(self):
+    def to_json(self) -> dict:
         return {"user_id": self.user.id,
                 "name": self.user.username}
 
 
 class Media(Base):
     __tablename__ = "media"
-    id: int = Column(Integer, primary_key=True)
-    tweet_id: int = Column(Integer, ForeignKey("tweet.id"))
-    path_file: str = Column(Text(), nullable=False)
-    medias: Optional["Tweet"] = relationship("Tweet", back_populates="tweet_image")
+    id = Column(Integer, primary_key=True)
+    tweet_id = Column(Integer, ForeignKey("tweet.id"))
+    path_file = Column(Text(), nullable=False)
+    medias = relationship("Tweet", back_populates="tweet_image")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "{name} ({id}', '{tweet_id}', '{path_file}')".format(
             name=self.__class__.__name__,
             id=self.id,

@@ -17,7 +17,6 @@ async def init_data():
 
     :return: None
     """
-
     logger.info("Добавление тестовых данных")
     engine = create_async_engine(
         settings.async_db_uri,
@@ -34,28 +33,28 @@ async def init_data():
          "api_token": jwt.encode(
              claims={"api-key": "test"},
              key=settings.secret_key,
-             algorithm=settings.algorithm, )
+             algorithm=settings.algorithm,)
          },
         {
             "username": "test1",
             "api_token": jwt.encode(
                 claims={"api-key": "test1"},
                 key=settings.secret_key,
-                algorithm=settings.algorithm, )
+                algorithm=settings.algorithm,)
         },
         {
             "username": "test2",
             "api_token": jwt.encode(
                 claims={"api-key": "test2"},
                 key=settings.secret_key,
-                algorithm=settings.algorithm, )
+                algorithm=settings.algorithm,)
         },
         {
             "username": "test3",
             "api_token": jwt.encode(
                 claims={"api-key": "test3"},
                 key=settings.secret_key,
-                algorithm=settings.algorithm, )
+                algorithm=settings.algorithm,)
         },
     ]
     async with async_session() as session:
@@ -67,5 +66,5 @@ async def init_data():
     logger.info("Тестовые данные добавлены!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(init_data())

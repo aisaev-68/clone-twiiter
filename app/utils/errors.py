@@ -10,20 +10,20 @@ FunVar = TypeVar("FunVar", bound=Callable[..., Any])
 logger = get_logger("error")
 
 
-def AppException(mtype: str, msg: str):
+def AppException(mtype: str, msg: str) -> Exception:
     raise AppExcept(mtype, msg)
 
+
 class AppExcept(Exception):
-    """
-    Пользовательский класс исключений.
-    """
+
+    """Пользовательский класс исключений."""
     def __init__(self, mtype: str, msg: str):
         super(AppExcept, self).__init__()
         self.mtype = mtype
         self.msg = msg
 
     def __str__(self) -> str:
-        return self.msg
+        return "{mtype} {msg}".format(mtype=self.mtype, msg=self.msg)
 
 
 async def create_valid_response(ex_type: str, msg: str) -> JSONResponse:
