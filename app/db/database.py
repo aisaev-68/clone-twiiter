@@ -10,7 +10,7 @@ from app.utils.logger import get_logger
 logger = get_logger("db.database")
 
 
-engine = create_async_engine(settings.async_db_uri, echo=True)
+engine = create_async_engine(settings.async_db_uri) # echo=True
 
 Base = declarative_base()
 

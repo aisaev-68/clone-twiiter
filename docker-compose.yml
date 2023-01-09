@@ -14,7 +14,7 @@ services:
       --workers 1
       "
     volumes:
-      - ./app:/home/code/app
+      - ./app:/code/app
     networks:
       - net
 
@@ -39,7 +39,7 @@ services:
     restart: always
     container_name: postgres
     environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
+#      POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
