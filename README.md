@@ -19,7 +19,7 @@
 
 1. Собрать образы и запустить сервисы: 
 ```
-docker-compose --file docker-compose-dev.yml up # режим dev
+docker-compose --file docker-compose-dev.yml up -d # режим dev
 docker-compose up -d --build # режим prod
 ```
 2. Инициализируйте базу и данные: 

@@ -1,7 +1,6 @@
 FROM python:3.10
 
-RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y
-
+RUN apt-get update
 WORKDIR /code
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

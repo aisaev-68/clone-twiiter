@@ -15,6 +15,7 @@ services:
       "
     volumes:
       - ./app:/code/app
+      - ./migrations:/code/migrations
     networks:
       - net
 
