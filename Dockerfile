@@ -2,7 +2,7 @@ FROM python:3.10
 
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y
 
-WORKDIR /home/code
+WORKDIR /code
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ARG INSTALL_ARGS="--no-root --no-dev"
